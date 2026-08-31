@@ -1,0 +1,331 @@
+{
+  "hero": {
+    "title": "Transform Recruitment and HR Operations into a Real-Time",
+    "titleHighlight": "Hiring Execution System",
+    "description": "Orchestrate candidate sourcing, screening, engagement, interview scheduling, and onboarding through a unified AI Operating System built for real-time execution, governance, and scale.",
+    "descriptionHighlight": "Hire faster. Reduce manual effort. Improve candidate experience-by design.",
+    "image": "https://theverticalai.top//Assets/Industry/HR/hr-1.jpg"
+  },
+  "trustedLogos": [
+        "https://theverticalai.top/Assets/client-logos/Bajaj-Finserv.png",
+        "https://theverticalai.top/Assets/client-logos/DRA-Homes.png",
+        "https://theverticalai.top/Assets/client-logos/Kotak-Mahindra.png",
+        "https://theverticalai.top/Assets/client-logos/smk-mg.png",
+        "https://theverticalai.top/Assets/client-logos/TVS-Credit.png"
+  ],
+  "otherFeatures": {
+    "title": "AI Adoption ≠",
+    "titleHighlight": "Hiring Execution",
+    "description": "HR teams use multiple tools for sourcing, screening, and communication-but execution across the hiring lifecycle remains fragmented. What breaks today:",
+    "features": [
+      {
+        "id": "manual-screening",
+        "title": "Manual Screening",
+        "description": "Candidate screening is manual, slow, and inconsistent across recruiters.",
+        "image": "https://theverticalai.top//Assets/Industry/HR/hr-2.webp"
+      },
+      {
+        "id": "communication-delays",
+        "title": "Communication Delays",
+        "description": "Communication delays directly lead to candidate drop-offs and lost talent.",
+        "image": "https://theverticalai.top//Assets/Industry/HR/hr-3.webp"
+      },
+      {
+        "id": "inefficient-scheduling",
+        "title": "Inefficient Scheduling",
+        "description": "Interview scheduling requires extensive coordination across multiple stakeholders.",
+        "image": "https://theverticalai.top//Assets/Industry/HR/hr-4.webp"
+      },
+      {
+        "id": "recruiter-workload",
+        "title": "High Recruiter Workload",
+        "description": "Recruiter workload severely limits hiring scalability and efficiency.",
+        "image": "https://theverticalai.top//Assets/Industry/HR/hr-5.webp"
+      },
+      {
+        "id": "siloed-systems",
+        "title": "Siloed HR Systems",
+        "description": "Systems operate in silos (ATS, CRM, email), with no unified execution layer.",
+        "image": "https://theverticalai.top//Assets/Industry/HR/hr-6.webp"
+      }
+    ]
+  },
+  "transformationFunnel": {
+    "items": [
+      "Manual resume screening",
+      "Delayed candidate communication",
+      "Inefficient scheduling",
+      "Fragmented hiring systems",
+      "Long hiring cycles"
+    ],
+    "outcomes": [
+      "Automated candidate qualification",
+      "Real-time engagement",
+      "Seamless interview coordination",
+      "Unified execution layer",
+      "Faster, optimized hiring process"
+    ]
+  },
+  "caseStudy": {
+    "title": "Recruitment Platform -",
+    "titleHighlight": "Hiring Process Automation",
+    "challenge": "Slow screening, high candidate drop-offs, and inefficient scheduling due to manual workflows.",
+    "solution": "Deployed The Vertical AI OS to automate screening, engagement, and interview scheduling across the hiring lifecycle. Execution Flow: Candidate applies → AI screens and ranks → engages candidate → schedules interview → sends reminders → tracks progress → onboarding initiated automatically.",
+    "results": [
+      "Up to 60% reduction in screening time",
+      "3x faster candidate response time",
+      "40% reduction in time-to-hire",
+      "Increased recruiter productivity and candidate engagement"
+    ],
+    "image": "https://theverticalai.top//Assets/Industry/HR/hr-7.jpg"
+  },
+  "verticalProduct": {
+    "title": "An AI Operating System for",
+    "titleHighlight": "Recruitment Workflows",
+    "subtitle": "The Vertical AI introduces a decision-driven execution layer across the hiring lifecycle. It determines:",
+    "pillars": [
+      {
+        "title": "Candidate Prioritization",
+        "description": "Which candidates to prioritize based on skills and intent."
+      },
+      {
+        "title": "Engagement Timing",
+        "description": "When and how to engage candidates across channels."
+      },
+      {
+        "title": "Workflow Automation",
+        "description": "How to automate screening, scheduling, and follow-ups."
+      },
+      {
+        "title": "Pipeline Optimization",
+        "description": "How to move candidates from application to onboarding efficiently."
+      },
+      {
+        "title": "Executable Outcomes",
+        "description": "Every interaction becomes a step toward faster and better hiring outcomes."
+      }
+    ]
+  },
+  "agentMapping": {
+    "title": "How The AI Operating System Works",
+    "titleHighlight": "Runs Your Operations End-to-End",
+    "agents": [
+      {
+        "title": "Vocalis",
+        "subtitle": "Voice Execution Layer",
+        "bullets": [
+          "Executes candidate voice interactions across channels",
+          "Maintains context across the hiring journey",
+          "Drives engagement and scheduling"
+        ],
+        "imageUrl": "https://theverticalai.top//Assets/Industry/vocalis.jpg"
+      },
+      {
+        "title": "Maestro",
+        "subtitle": "Decision & Orchestration Engine",
+        "bullets": [
+          "Determines next-best action across hiring workflows",
+          "Coordinates AI, recruiters, and HR systems in real time",
+          "Optimizes hiring decisions and execution"
+        ],
+        "imageUrl": "https://theverticalai.top//Assets/Industry/maestro.jpg"
+      },
+      {
+        "title": "Insight",
+        "subtitle": "Outcome Intelligence OS",
+        "bullets": [
+          "Identifies bottlenecks and inefficiencies in hiring",
+          "Analyzes candidate behavior and recruiter performance",
+          "Continuously improves recruitment outcomes"
+        ],
+        "imageUrl": "https://theverticalai.top//Assets/Industry/insights.jpg"
+      },
+      {
+        "title": "Guardian",
+        "subtitle": "Governance & Compliance OS",
+        "bullets": [
+          "Ensures compliance with hiring policies and data regulations",
+          "Validates actions before execution",
+          "Maintains full auditability"
+        ],
+        "imageUrl": "https://theverticalai.top//Assets/Industry/guardian.jpg"
+      },
+      {
+        "title": "Conversa",
+        "subtitle": "Digital Interaction Layer",
+        "bullets": [
+          "Executes candidate digital interactions across channels",
+          "Maintains context across the hiring journey",
+          "Drives engagement, scheduling, and follow-ups"
+        ],
+        "imageUrl": "https://theverticalai.top//Assets/Industry/conversa.jpg"
+      }
+    ]
+  },
+  "compliance": {
+    "title": "Built for HR systems and",
+    "titleHighlight": "candidate data protection:",
+    "items": [
+      {
+        "title": "Data Privacy",
+        "desc": "Secure handling of sensitive candidate data and communications.",
+        "imageUrl": "https://theverticalai.top//Assets/Industry/Security.jpg",
+        "tags": [
+          "Privacy",
+          "Data Security"
+        ]
+      },
+      {
+        "title": "System Integration",
+        "desc": "Seamless integration with leading ATS and HR platforms.",
+        "imageUrl": "https://theverticalai.top//Assets/Industry/Integration.jpg",
+        "tags": [
+          "Integration",
+          "ATS/HRIS"
+        ]
+      },
+      {
+        "title": "Standards Compliance",
+        "desc": "Full compliance with global data protection and hiring regulations.",
+        "imageUrl": "https://theverticalai.top//Assets/Industry/Compliance.jpg",
+        "tags": [
+          "Compliance",
+          "Standards"
+        ]
+      },
+      {
+        "title": "Enterprise Security",
+        "desc": "End-to-end encryption, role-based access control, secure API integrations, and scalable infrastructure.",
+        "imageUrl": "https://theverticalai.top//Assets/Industry/Enterprise.jpg",
+        "tags": [
+          "Enterprise",
+          "Security"
+        ]
+      }
+    ]
+  },
+  "useCases": [
+    {
+      "id": "candidate-screening",
+      "label": "Candidate Screening",
+      "tag": "AI Evaluation",
+      "content": {
+        "title": "AI-Powered Candidate Screening",
+        "desc": "Automate resume evaluation and qualification at scale.",
+        "capabilities": [
+          "Automated resume parsing and evaluation",
+          "Pre-screening through conversational AI",
+          "Skill and intent-based candidate qualification",
+          "Dynamic ranking and prioritization"
+        ],
+        "outcomes": [
+          "Up to 60% reduction in screening time",
+          "Faster shortlisting of qualified candidates",
+          "Reduced manual effort for recruiters",
+          "Improved hiring accuracy"
+        ]
+      }
+    },
+    {
+      "id": "candidate-engagement",
+      "label": "Candidate Engagement",
+      "tag": "Automated Communication",
+      "content": {
+        "title": "Automated Candidate Engagement",
+        "desc": "Maintain continuous communication throughout the hiring process.",
+        "capabilities": [
+          "Instant responses to candidate queries",
+          "Automated follow-ups and status updates",
+          "Personalized communication across channels",
+          "Multilingual candidate interaction"
+        ],
+        "outcomes": [
+          "Improved candidate experience",
+          "Reduced drop-offs across hiring stages",
+          "Faster response cycles",
+          "Higher engagement rates"
+        ]
+      }
+    },
+    {
+      "id": "interview-scheduling",
+      "label": "Interview Scheduling",
+      "tag": "Automated Coordination",
+      "content": {
+        "title": "Interview Scheduling & Coordination",
+        "desc": "Eliminate scheduling friction across stakeholders.",
+        "capabilities": [
+          "Calendar integration for real-time availability",
+          "Automated scheduling and confirmations",
+          "Reminders and rescheduling workflows",
+          "Coordination across interview panels"
+        ],
+        "outcomes": [
+          "Faster interview scheduling",
+          "Reduced coordination delays",
+          "Improved candidate attendance",
+          "Streamlined hiring workflows"
+        ]
+      }
+    },
+    {
+      "id": "workflow-insights",
+      "label": "Workflows & Insights",
+      "tag": "End-to-End Execution",
+      "content": {
+        "title": "Workflow Automation & Hiring Insights",
+        "desc": "Automate hiring processes and improve outcomes through data.",
+        "capabilities": [
+          "Integration with ATS, CRM, and HR systems",
+          "Task automation and status tracking",
+          "Candidate behavior and drop-off analysis",
+          "Data-driven recommendations for recruiters"
+        ],
+        "outcomes": [
+          "Faster hiring cycles",
+          "Improved operational efficiency",
+          "Better hiring decisions",
+          "Increased hiring success rates"
+        ]
+      }
+    }
+  ],
+  "metrics": {
+    "title": "Proven Outcomes Across",
+    "titleHighlight": "Recruitment Operations",
+    "items": [
+      {
+        "prefix": "↓",
+        "num": "60",
+        "sym": "%",
+        "label": "Screening Time",
+        "desc": "Reduction in candidate screening time."
+      },
+      {
+        "prefix": "↑",
+        "num": "3x",
+        "sym": "",
+        "label": "Response Time",
+        "desc": "Faster candidate response time."
+      },
+      {
+        "prefix": "↓",
+        "num": "40",
+        "sym": "%",
+        "label": "Time-to-Hire",
+        "desc": "Reduction in overall time-to-hire."
+      },
+      {
+        "prefix": "↑",
+        "num": "Higher",
+        "sym": "",
+        "label": "Engagement",
+        "desc": "Increased candidate engagement."
+      }
+    ]
+  },
+  "finalCta": {
+    "title": "Ready to Transform Your",
+    "titleHighlight": "HR Operations?"
+  }
+}

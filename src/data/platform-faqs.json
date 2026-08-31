@@ -1,0 +1,224 @@
+{
+  "maestro": [
+    {
+      "faq_id": 1,
+      "question": "Is Maestro just another workflow automation tool?",
+      "answer": "No. Traditional automation tools execute predefined flows. Maestro dynamically determines and coordinates the next-best action across systems, AI agents, and enterprise workflows."
+    },
+    {
+      "faq_id": 2,
+      "question": "How is Maestro different from integration platforms?",
+      "answer": "Integration tools connect systems. Maestro orchestrates execution between them - combining decisions, workflows, governance, and operational coordination."
+    },
+    {
+      "faq_id": 3,
+      "question": "Can Maestro work with existing enterprise systems?",
+      "answer": "Yes. Maestro integrates with CRM, ERP, core systems, APIs, and operational infrastructure without requiring replacement."
+    },
+    {
+      "faq_id": 4,
+      "question": "How does Maestro control AI unpredictability?",
+      "answer": "Execution is governed through runtime policy validation and operational controls. AI can recommend actions, but execution remains controlled and auditable."
+    },
+    {
+      "faq_id": 5,
+      "question": "Can it operate in regulated environments?",
+      "answer": "Yes. Maestro is designed for enterprises requiring governance, compliance, auditability, and operational control."
+    },
+    {
+      "faq_id": 6,
+      "question": "Does Maestro replace human teams?",
+      "answer": "No. Maestro coordinates AI systems and human teams together - ensuring the right tasks are handled by the right entity at the right time."
+    },
+    {
+      "faq_id": 7,
+      "question": "How quickly can Maestro be deployed?",
+      "answer": "Deployment timelines vary based on workflows and integrations, but the platform is designed for rapid enterprise implementation and phased rollout."
+    }
+  ],
+  "vocalis": [
+    {
+      "faq_id": 1,
+      "question": "Is Vocalis just a chatbot or voice bot platform?",
+      "answer": "No. Vocalis is a conversational execution system that coordinates conversations, workflows, and enterprise actions across voice and digital channels."
+    },
+    {
+      "faq_id": 2,
+      "question": "Does Vocalis support both voice and messaging channels?",
+      "answer": "Yes. Vocalis supports voice, WhatsApp, SMS, email, and chat within a unified conversational infrastructure."
+    },
+    {
+      "faq_id": 3,
+      "question": "Can conversations trigger workflows and backend actions?",
+      "answer": "Yes. Conversations can directly execute workflows including payments, escalations, onboarding, approvals, and support actions."
+    },
+    {
+      "faq_id": 4,
+      "question": "Does Vocalis maintain context across channels?",
+      "answer": "Yes. Users can move across channels without losing conversation history, context, or workflow continuity."
+    },
+    {
+      "faq_id": 5,
+      "question": "Can it integrate with existing enterprise systems?",
+      "answer": "Yes. Vocalis integrates with CRM, ERP, payment systems, APIs, and operational infrastructure without replacing existing systems."
+    },
+    {
+      "faq_id": 6,
+      "question": "Is it suitable for regulated industries?",
+      "answer": "Yes. Vocalis is designed for enterprises requiring governance, compliance, auditability, and secure communication workflows."
+    },
+    {
+      "faq_id": 7,
+      "question": "Can Vocalis scale for large enterprise interaction volumes?",
+      "answer": "Yes. The platform is built to support high-volume inbound and outbound enterprise communication workflows at scale."
+    }
+  ],
+  "guardian": [
+    {
+      "faq_id": 1,
+      "question": "Is Guardian just a compliance monitoring tool?",
+      "answer": "No. Guardian actively enforces governance and compliance before execution instead of only monitoring or auditing after actions occur."
+    },
+    {
+      "faq_id": 2,
+      "question": "How is Guardian different from traditional GRC tools?",
+      "answer": "Traditional GRC systems focus on reporting and oversight. Guardian operates directly inside execution workflows to enforce policies in real time."
+    },
+    {
+      "faq_id": 3,
+      "question": "Can Guardian work with existing enterprise systems?",
+      "answer": "Yes. Guardian integrates across CRM, ERP, APIs, AI systems, and enterprise infrastructure without requiring replacement."
+    },
+    {
+      "faq_id": 4,
+      "question": "Can Guardian control AI-related operational risks?",
+      "answer": "Yes. Every AI-driven action is validated against enterprise policies and operational controls before execution."
+    },
+    {
+      "faq_id": 5,
+      "question": "Is Guardian suitable for regulated industries?",
+      "answer": "Yes. Guardian is designed for enterprises requiring strong governance, auditability, compliance enforcement, and operational control."
+    },
+    {
+      "faq_id": 6,
+      "question": "Does Guardian support private deployments?",
+      "answer": "Yes. Guardian supports on-prem, private cloud, hybrid, and air-gapped deployment environments."
+    },
+    {
+      "faq_id": 7,
+      "question": "Can Guardian scale across large enterprise workflows?",
+      "answer": "Yes. The platform is designed to govern high-volume workflows, systems, and enterprise operations in real time."
+    }
+  ],
+  "insight": [
+    {
+      "faq_id": 1,
+      "question": "Is Insight just another analytics or BI platform?",
+      "answer": "No. Insight is an operational intelligence system designed to continuously improve enterprise execution in real time."
+    },
+    {
+      "faq_id": 2,
+      "question": "How is Insight different from traditional dashboards?",
+      "answer": "Dashboards explain what happened. Insight identifies operational patterns and continuously feeds intelligence into workflows and execution systems."
+    },
+    {
+      "faq_id": 3,
+      "question": "Does Insight operate in real time?",
+      "answer": "Yes. Insight continuously analyzes workflows, systems, conversations, and operational signals in real time."
+    },
+    {
+      "faq_id": 4,
+      "question": "Can Insight integrate with existing enterprise systems?",
+      "answer": "Yes. Insight integrates across CRM, ERP, APIs, workflows, and enterprise infrastructure without requiring data migration."
+    },
+    {
+      "faq_id": 5,
+      "question": "Does it improve operational outcomes automatically?",
+      "answer": "Yes. Intelligence generated by Insight can directly influence orchestration, workflows, and enterprise execution systems."
+    },
+    {
+      "faq_id": 6,
+      "question": "Is Insight suitable for large-scale enterprise environments?",
+      "answer": "Yes. The platform is designed for high-volume operational environments requiring continuous intelligence and optimization."
+    },
+    {
+      "faq_id": 7,
+      "question": "Can Insight work alongside Maestro and Guardian?",
+      "answer": "Yes. Insight continuously feeds operational intelligence into orchestration and governance layers across the platform ecosystem."
+    }
+  ],
+  "insights": [
+    {
+      "faq_id": 1,
+      "question": "Is Insight just another analytics or BI platform?",
+      "answer": "No. Insight is an operational intelligence system designed to continuously improve enterprise execution in real time."
+    },
+    {
+      "faq_id": 2,
+      "question": "How is Insight different from traditional dashboards?",
+      "answer": "Dashboards explain what happened. Insight identifies operational patterns and continuously feeds intelligence into workflows and execution systems."
+    },
+    {
+      "faq_id": 3,
+      "question": "Does Insight operate in real time?",
+      "answer": "Yes. Insight continuously analyzes workflows, systems, conversations, and operational signals in real time."
+    },
+    {
+      "faq_id": 4,
+      "question": "Can Insight integrate with existing enterprise systems?",
+      "answer": "Yes. Insight integrates across CRM, ERP, APIs, workflows, and enterprise infrastructure without requiring data migration."
+    },
+    {
+      "faq_id": 5,
+      "question": "Does it improve operational outcomes automatically?",
+      "answer": "Yes. Intelligence generated by Insight can directly influence orchestration, workflows, and enterprise execution systems."
+    },
+    {
+      "faq_id": 6,
+      "question": "Is Insight suitable for large-scale enterprise environments?",
+      "answer": "Yes. The platform is designed for high-volume operational environments requiring continuous intelligence and optimization."
+    },
+    {
+      "faq_id": 7,
+      "question": "Can Insight work alongside Maestro and Guardian?",
+      "answer": "Yes. Insight continuously feeds operational intelligence into orchestration and governance layers across the platform ecosystem."
+    }
+  ],
+  "conversa": [
+    {
+      "faq_id": 1,
+      "question": "Is Conversa just a chatbot platform?",
+      "answer": "No. Conversa is a conversational execution system designed to coordinate conversations, workflows, and enterprise actions across voice and digital channels."
+    },
+    {
+      "faq_id": 2,
+      "question": "Does Conversa support both voice and messaging interactions?",
+      "answer": "Yes. Conversa supports voice, WhatsApp, SMS, email, and chat within a unified conversational infrastructure."
+    },
+    {
+      "faq_id": 3,
+      "question": "Can conversations trigger workflows and backend actions?",
+      "answer": "Yes. Conversations can directly execute workflows including payments, escalations, onboarding, reminders, approvals, and support actions."
+    },
+    {
+      "faq_id": 4,
+      "question": "Does Conversa maintain context across channels?",
+      "answer": "Yes. Users can move between voice and digital channels without losing context, history, or workflow continuity."
+    },
+    {
+      "faq_id": 5,
+      "question": "Can Conversa integrate with existing enterprise systems?",
+      "answer": "Yes. Conversa integrates with CRM, ERP, APIs, payment systems, and enterprise operational infrastructure."
+    },
+    {
+      "faq_id": 6,
+      "question": "Is Conversa suitable for regulated industries?",
+      "answer": "Yes. Conversa is designed for enterprises requiring governance, auditability, compliance, and secure conversational operations."
+    },
+    {
+      "faq_id": 7,
+      "question": "Can Conversa handle large-scale enterprise interaction volumes?",
+      "answer": "Yes. The platform is built for high-volume enterprise communication workflows across support, collections, engagement, and customer operations."
+    }
+  ]
+}

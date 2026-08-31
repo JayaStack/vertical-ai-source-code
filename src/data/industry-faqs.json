@@ -1,0 +1,71 @@
+{
+  "bfsi": [
+    { "faq_id": 1, "question": "Is The Vertical AI compliant with RBI guidelines?", "answer": "Yes. All workflows follow RBI Fair Practice Code with full auditability." },
+    { "faq_id": 2, "question": "Can it integrate with core banking systems?", "answer": "Yes. It integrates with CBS, LOS, CRM, and financial platforms." },
+    { "faq_id": 3, "question": "How does it maintain empathy in collections?", "answer": "AI adapts tone and strategy dynamically based on borrower behavior." },
+    { "faq_id": 4, "question": "Can it handle enterprise-scale operations?", "answer": "Yes. It is designed to handle millions of interactions daily." }
+  ],
+  "healthcare": [
+    { "faq_id": 1, "question": "How does this improve patient engagement?", "answer": "By executing real-time, personalized interactions across channels and automating follow-ups throughout the patient journey." },
+    { "faq_id": 2, "question": "Can it integrate with hospital systems?", "answer": "Yes. It integrates with EMR, HMS, CRM, and internal systems via secure APIs." },
+    { "faq_id": 3, "question": "Is patient data secure?", "answer": "Yes. Data is encrypted and managed under strict compliance frameworks with full auditability." },
+    { "faq_id": 4, "question": "Does it reduce missed appointments?", "answer": "Yes. Predictive scheduling and automated reminders significantly reduce no-shows." },
+    { "faq_id": 5, "question": "Can it assist in clinical workflows?", "answer": "Yes. It automates documentation, reporting, and workflow coordination across departments." }
+  ],
+  "telecom": [
+    { "faq_id": 1, "question": "Can the platform handle telecom-scale operations?", "answer": "Yes. It is designed to handle millions of interactions across channels without performance degradation." },
+    { "faq_id": 2, "question": "How does AI resolve technical issues automatically?", "answer": "By using real-time diagnostics, customer data, and predefined workflows to identify and resolve issues instantly." },
+    { "faq_id": 3, "question": "Does it reduce call center costs?", "answer": "Yes. Automating up to 45% of support queries significantly reduces dependency on call centers." },
+    { "faq_id": 4, "question": "How does it reduce churn?", "answer": "By predicting churn using behavioral signals and executing retention workflows proactively." },
+    { "faq_id": 5, "question": "Can it integrate with telecom systems?", "answer": "Yes. It integrates with CRM, billing systems, and network platforms via secure APIs." }
+  ],
+  "ecommerce": [
+    { "faq_id": 1, "question": "How does AI recover abandoned carts?", "answer": "By analyzing user behavior and triggering personalized, real-time engagement across channels to bring users back." },
+    { "faq_id": 2, "question": "Can it handle customer support queries fully?", "answer": "Yes. It can automate up to 75% of queries including tracking, returns, refunds, and product inquiries." },
+    { "faq_id": 3, "question": "Will this increase conversions?", "answer": "Yes. Real-time personalization and execution-driven engagement significantly improve conversion rates." },
+    { "faq_id": 4, "question": "How does it reduce WISMO queries?", "answer": "By proactively sending order updates and delivery notifications, reducing the need for customers to reach out." },
+    { "faq_id": 5, "question": "Can it integrate with e-commerce platforms?", "answer": "Yes. It integrates with Shopify, WooCommerce, and other platforms via APIs." }
+  ],
+  "automotive": [
+    { "faq_id": 1, "question": "How does AI improve automotive lead conversion?", "answer": "By responding instantly, qualifying leads, and maintaining continuous follow-ups across the customer journey." },
+    { "faq_id": 2, "question": "Can it schedule test drives automatically?", "answer": "Yes. It manages bookings, confirmations, and reminders seamlessly." },
+    { "faq_id": 3, "question": "Does it help with after-sales service?", "answer": "Yes. AI automates reminders, scheduling, and follow-ups to improve retention." },
+    { "faq_id": 4, "question": "Can it integrate with dealership systems?", "answer": "Yes. It integrates with CRM, DMS, and service platforms via APIs." },
+    { "faq_id": 5, "question": "How does it improve customer experience?", "answer": "By providing real-time, personalized, and consistent communication across the lifecycle." }
+  ],
+  "edtech": [
+    { "faq_id": 1, "question": "How does AI improve student engagement?", "answer": "By delivering personalized learning, instant support, and timely reminders to keep students active." },
+    { "faq_id": 2, "question": "Can it reduce student drop-offs?", "answer": "Yes. It detects disengagement early and triggers re-engagement workflows automatically." },
+    { "faq_id": 3, "question": "Does it integrate with LMS platforms?", "answer": "Yes. It integrates with LMS, CRM, and backend systems via APIs." },
+    { "faq_id": 4, "question": "Can AI handle student doubts in real time?", "answer": "Yes. AI agents provide instant responses across subjects and courses." },
+    { "faq_id": 5, "question": "How does it improve learning outcomes?", "answer": "By analyzing behavior and performance, and continuously optimizing the learning experience." }
+  ],
+  "bpo": [
+    { "faq_id": 1, "question": "Does AI replace human agents?", "answer": "No. It automates repetitive tasks and assists agents, allowing them to focus on complex interactions." },
+    { "faq_id": 2, "question": "How does AI reduce handling time?", "answer": "By providing real-time guidance, automating workflows, and retrieving information instantly." },
+    { "faq_id": 3, "question": "Can it monitor all interactions?", "answer": "Yes. It analyzes 100% of calls and chats for quality and compliance." },
+    { "faq_id": 4, "question": "Will this improve SLA performance?", "answer": "Yes. Faster routing and higher resolution rates improve SLA adherence." },
+    { "faq_id": 5, "question": "Can it scale for large operations?", "answer": "Yes. It is designed to handle high-volume interactions across multiple channels." }
+  ],
+  "microfinance": [
+    { "faq_id": 1, "question": "How does AI improve microfinance collections?", "answer": "By automating borrower communication, prioritizing high-risk accounts, and ensuring timely engagement." },
+    { "faq_id": 2, "question": "Can it reduce dependency on field agents?", "answer": "Yes. Digital communication significantly reduces the need for physical collection efforts." },
+    { "faq_id": 3, "question": "Does it support multilingual communication?", "answer": "Yes. AI interacts with borrowers in multiple languages across channels." },
+    { "faq_id": 4, "question": "Can it integrate with loan systems?", "answer": "Yes. It integrates with loan origination and financial systems via APIs." },
+    { "faq_id": 5, "question": "How does it reduce default risk?", "answer": "By identifying early warning signals and enabling proactive intervention strategies." }
+  ],
+  "travel": [
+    { "faq_id": 1, "question": "How does AI improve booking conversions?", "answer": "By responding instantly to inquiries, providing personalized recommendations, and following up automatically." },
+    { "faq_id": 2, "question": "Can it manage guest communication end-to-end?", "answer": "Yes. It handles communication across pre-booking, travel, and post-travel stages." },
+    { "faq_id": 3, "question": "Does it support real-time travel updates?", "answer": "Yes. It provides instant updates for itinerary changes and disruptions." },
+    { "faq_id": 4, "question": "Can it integrate with travel systems?", "answer": "Yes. It integrates with booking engines, CRMs, and travel APIs." },
+    { "faq_id": 5, "question": "How does it improve guest experience?", "answer": "By delivering real-time, personalized, and continuous engagement throughout the journey." }
+  ],
+  "hr-services": [
+    { "faq_id": 1, "question": "How does AI improve candidate screening?", "answer": "By automatically evaluating resumes and interactions to identify the most relevant candidates quickly." },
+    { "faq_id": 2, "question": "Can it handle candidate communication?", "answer": "Yes. It manages queries, updates, and follow-ups across all hiring stages." },
+    { "faq_id": 3, "question": "Does it integrate with ATS systems?", "answer": "Yes. It integrates with ATS, CRM, and HR platforms via APIs." },
+    { "faq_id": 4, "question": "Can AI schedule interviews automatically?", "answer": "Yes. It coordinates availability and manages scheduling workflows seamlessly." },
+    { "faq_id": 5, "question": "How does it reduce hiring time?", "answer": "By automating screening, communication, and scheduling processes." }
+  ]
+}
