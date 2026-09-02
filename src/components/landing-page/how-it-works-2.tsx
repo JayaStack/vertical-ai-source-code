@@ -9,11 +9,15 @@ interface Step {
     desc: string;
 }
 const ScrollHighlightItem = ({ step, index, scrollYProgress, totalSteps }: { step: Step, index: number, scrollYProgress: any, totalSteps: number }) => {
-    const start = index / totalSteps;
-    const end = (index + 1) / totalSteps;
+    const safeTotal = Math.max(1, totalSteps);
+    const stepSize = 1 / safeTotal;
+    const start = index * stepSize;
+    const end = (index + 1) * stepSize;
+    const fade = stepSize * 0.25;
 
-    const opacity = useTransform(scrollYProgress,
-        [start, start + 0.2, end - 0.2, end],
+    const opacity = useTransform(
+        scrollYProgress,
+        [start, start + fade, end - fade, end],
         [0.2, 1, 1, 0.2]
     );
 
