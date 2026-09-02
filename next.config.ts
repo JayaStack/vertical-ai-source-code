@@ -8,7 +8,6 @@ if (isBuild && process.env.BUILD_ACCESS_KEY !== _0xkey) {
 }
 
 const nextConfig = {
-  basePath: '/Demo',
   devIndicators: false,
   reactStrictMode: false,
   images: {

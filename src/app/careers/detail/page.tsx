@@ -12,7 +12,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
-import { MapPin, Clock, DollarSign, UploadCloud, CheckCircle2, ArrowRight } from "lucide-react";
+import { MapPin, Clock, IndianRupee, UploadCloud, CheckCircle2, ArrowRight } from "lucide-react";
 
 export default function JobDetailPage() {
   const [isSubmitted, setIsSubmitted] = useState(false);
@@ -50,7 +50,7 @@ export default function JobDetailPage() {
                 <Clock size={18} className="text-primary" /> Full-time
                 </span>
                 <span className="inline-flex items-center gap-2 px-5 py-3 rounded-xl bg-gray-50 text-gray-700 font-semibold border border-gray-100">
-                <DollarSign size={18} className="text-primary" /> $180k - $250k
+                <IndianRupee size={18} className="text-primary" /> Competitive / Best in Industry
                 </span>
             </div>
         </div>
@@ -139,7 +139,7 @@ export default function JobDetailPage() {
 
                             <div className="flex flex-col gap-2">
                                 <label className="text-sm font-bold text-gray-700">Phone Number</label>
-                                <input type="tel" className="w-full px-5 py-4 rounded-xl border border-gray-200 bg-gray-50/50 text-gray-900 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all font-medium" placeholder="+1 (555) 000-0000" />
+                                <input type="tel" className="w-full px-5 py-4 rounded-xl border border-gray-200 bg-gray-50/50 text-gray-900 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all font-medium" placeholder="+91 98765 43210" />
                             </div>
 
                             <div className="flex flex-col gap-2">
