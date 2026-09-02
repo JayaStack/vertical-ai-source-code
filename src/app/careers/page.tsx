@@ -9,7 +9,8 @@ import {
   MapPin,
   Clock,
   ArrowRight,
-  DollarSign,
+  IndianRupee,
+  Briefcase,
   Cpu,
   Rocket,
   Network,
@@ -18,6 +19,7 @@ import {
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
+import { jobListings } from "@/data/careers";
 import {
   Select,
   SelectContent,
@@ -35,26 +37,10 @@ const jobCategories = [
   "Design",
 ];
 
-const missions: Array<{
-  title: string;
-  category: string;
-  location: string;
-  type: string;
-  salary: string;
-  description: string;
-  link: string;
-}> = [
-  {
-    title: "Senior Software Engineer",
-    category: "Engineering",
-    location: "San Francisco, CA",
-    type: "Full-time",
-    salary: "$150,000 - $200,000",
-    description:
-      "Join our team of engineers to build the next generation of AI-powered solutions.",
-    link: "/careers/senior-software-engineer",
-  },
-];
+const missions = jobListings.map((job) => ({
+  ...job,
+  link: `/careers/${job.slug}`,
+}));
 
 const manifestoPoints = [
   {
@@ -272,8 +258,14 @@ export default function CareersPage() {
                             <Clock size={16} className="text-gray-400" />{" "}
                             {mission.type}
                           </span>
+                          {mission.experience && (
+                            <span className="inline-flex items-center gap-2 text-gray-500 text-sm font-medium">
+                              <Briefcase size={16} className="text-gray-400" />{" "}
+                              {mission.experience}
+                            </span>
+                          )}
                           <span className="inline-flex items-center gap-2 text-gray-500 text-sm font-medium">
-                            <DollarSign size={16} className="text-gray-400" />{" "}
+                            <IndianRupee size={16} className="text-gray-400" />{" "}
                             {mission.salary}
                           </span>
                         </div>
@@ -283,7 +275,7 @@ export default function CareersPage() {
                           onClick={() => router.push(mission.link)}
                           className="w-fit inline-flex items-center justify-center gap-2 py-2 sm:py-3 px-4 sm:px-5 rounded-2xl bg-primary text-white font-bold text-sm sm:text-base transition-all duration-300 shadow-xl shadow-primary/20 hover:-translate-y-1 hover:scale-105 active:scale-95 hover:!bg-black"
                         >
-                          <span>Join Mission</span>
+                          <span>Apply Here</span>
                           <ArrowRight className="w-4 h-4 sm:w-5 sm:h-5" />
                         </button>
                       </div>
