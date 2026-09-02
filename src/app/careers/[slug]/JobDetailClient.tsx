@@ -140,6 +140,7 @@ export default function JobDetailClient() {
   const [expectedCtc, setExpectedCtc] = useState("");
   const [source, setSource] = useState("");
   const [otherSource, setOtherSource] = useState("");
+  const [referrerName, setReferrerName] = useState("");
   const [coverLetter, setCoverLetter] = useState("");
   const [resumeFile, setResumeFile] = useState<File | null>(null);
 
@@ -221,6 +222,7 @@ export default function JobDetailClient() {
     setExpectedCtc("");
     setSource("");
     setOtherSource("");
+    setReferrerName("");
     setCoverLetter("");
     setResumeFile(null);
     setIsDragging(false);
@@ -266,6 +268,10 @@ export default function JobDetailClient() {
       toast.error("Please select how you heard about us");
       return;
     }
+    if (source === "Employee Referral" && !referrerName.trim()) {
+      toast.error("Please enter the name of the employee who referred you");
+      return;
+    }
     if (source === "Other" && !otherSource.trim()) {
       toast.error("Please specify how you heard about us");
       return;
@@ -287,10 +293,12 @@ export default function JobDetailClient() {
       formData.append("totalExperience", totalExperience || "Not specified");
       formData.append("noticePeriod", noticePeriod || "Not specified");
       formData.append("expectedCtc", expectedCtc.trim() || "Not specified");
-      const finalSource =
-        source === "Other" && otherSource.trim()
-          ? `Other: ${otherSource.trim()}`
-          : source || "Not specified";
+      let finalSource = source || "Not specified";
+      if (source === "Other" && otherSource.trim()) {
+        finalSource = `Other: ${otherSource.trim()}`;
+      } else if (source === "Employee Referral" && referrerName.trim()) {
+        finalSource = `Employee Referral (Referred by: ${referrerName.trim()})`;
+      }
       formData.append("source", finalSource);
       formData.append("coverLetter", coverLetter.trim() || "Not provided");
 
@@ -790,6 +798,7 @@ export default function JobDetailClient() {
                     onChange={(val) => {
                       setSource(val);
                       if (val !== "Other") setOtherSource("");
+                      if (val !== "Employee Referral") setReferrerName("");
                     }}
                     disabled={isSubmitting}
                     required
@@ -804,9 +813,30 @@ export default function JobDetailClient() {
                     ]}
                   />
 
+                  {/* Input box when "Employee Referral" is selected */}
+                  {source === "Employee Referral" && (
+                    <div className="mt-2 flex flex-col gap-1">
+                      <label className="text-xs font-semibold text-gray-700">
+                        Referring Employee Name <span className="text-red-500">*</span>
+                      </label>
+                      <input
+                        type="text"
+                        value={referrerName}
+                        onChange={(e) => setReferrerName(e.target.value)}
+                        disabled={isSubmitting}
+                        required
+                        className="w-full px-4 py-3 rounded-xl border border-gray-200 bg-gray-50/50 text-gray-900 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all font-medium text-sm disabled:opacity-60 placeholder:text-gray-400"
+                        placeholder="Enter the employee's name (e.g. John Doe)..."
+                      />
+                    </div>
+                  )}
+
                   {/* Note box when "Other" is selected */}
                   {source === "Other" && (
-                    <div className="mt-2">
+                    <div className="mt-2 flex flex-col gap-1">
+                      <label className="text-xs font-semibold text-gray-700">
+                        Please specify <span className="text-red-500">*</span>
+                      </label>
                       <input
                         type="text"
                         value={otherSource}
