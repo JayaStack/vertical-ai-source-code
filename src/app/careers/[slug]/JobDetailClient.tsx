@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useRef } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useParams, notFound } from "next/navigation";
 import Header from "@/components/landing-page/header";
 import PageHero from "@/components/landing-page/page-hero";
@@ -31,7 +31,6 @@ import {
   ChevronDown,
   Check,
 } from "lucide-react";
-import { jobListings } from "@/data/careers";
 import banner from "@/assets/career-banner.webp";
 import toast, { Toaster } from "react-hot-toast";
 
@@ -124,7 +123,19 @@ export default function JobDetailClient() {
   const params = useParams();
   const slug = params?.slug as string;
 
-  const job = jobListings.find((j) => j.slug === slug);
+  const [job, setJob] = useState<any>(null);
+
+  useEffect(() => {
+    fetch("/api/careers")
+      .then((res) => res.json())
+      .then((json) => {
+        if (json.success && Array.isArray(json.data)) {
+          const found = json.data.find((j: any) => j.slug === slug);
+          setJob(found || null);
+        }
+      })
+      .catch(() => setJob(null));
+  }, [slug]);
 
   // Dialog state
   const [isDialogOpen, setIsDialogOpen] = useState(false);

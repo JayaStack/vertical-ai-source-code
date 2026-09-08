@@ -1,0 +1,121 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model BlogPost {
+  id           String    @id
+  slug         String    @unique
+  title        String
+  bannerUrl    String
+  outline      String
+  content      String
+  readingTime  String
+  keyTakeaways String[]
+  author       String    @default("Admin")
+  category     String
+  tags         String[]
+  status       String    @default("draft")
+  publishedAt  DateTime?
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime
+}
+
+model CaseStudy {
+  id              String   @id
+  slug            String   @unique
+  title           String
+  clientName      String
+  industry        String
+  bannerUrl       String
+  outcome         String
+  kpiPrimaryValue String
+  metrics         Json
+  content         String
+  status          String   @default("draft")
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime
+}
+
+model Faq {
+  id        String   @id
+  question  String
+  answer    String
+  type      String
+  scopeKey  String?
+  category  String?
+  status    String   @default("draft")
+  createdAt DateTime @default(now())
+  updatedAt DateTime
+}
+
+model JobApplication {
+  id              String      @id
+  jobListingId    String?
+  jobTitle        String
+  jobCategory     String
+  jobLocation     String
+  fullName        String
+  email           String
+  phone           String?
+  linkedin        String?
+  currentLocation String?
+  totalExperience String?
+  noticePeriod    String?
+  expectedCtc     String?
+  source          String?
+  coverLetter     String?
+  resumeUrl       String?
+  status          String      @default("new")
+  createdAt       DateTime    @default(now())
+  JobListing      JobListing? @relation(fields: [jobListingId], references: [id])
+}
+
+model JobListing {
+  id               String           @id
+  slug             String           @unique
+  title            String
+  category         String
+  location         String
+  type             String
+  experience       String?
+  salary           String
+  status           String           @default("draft")
+  description      String
+  about            String[]
+  responsibilities String[]
+  requirements     String[]
+  createdAt        DateTime         @default(now())
+  updatedAt        DateTime
+  JobApplication   JobApplication[]
+}
+
+model TeamMember {
+  id          String   @id
+  name        String
+  role        String
+  bio         String
+  imageUrl    String
+  linkedinUrl String?
+  twitterUrl  String?
+  mailTo      String?
+  sortOrder   Int      @default(0)
+  status      String   @default("draft")
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime
+}
+
+model Testimonial {
+  id          String   @id
+  content     String
+  companyName String
+  rating      Int      @default(5)
+  logoUrl     String
+  status      String   @default("draft")
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime
+}

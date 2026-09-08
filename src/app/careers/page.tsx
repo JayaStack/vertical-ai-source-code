@@ -19,7 +19,6 @@ import {
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
-import { jobListings } from "@/data/careers";
 import {
   Select,
   SelectContent,
@@ -37,10 +36,21 @@ const jobCategories = [
   "Design",
 ];
 
-const missions = jobListings.map((job) => ({
-  ...job,
-  link: `/careers/${job.slug}`,
-}));
+interface CareerItem {
+  id: string;
+  slug: string;
+  title: string;
+  category: string;
+  location: string;
+  type: string;
+  experience?: string;
+  salary: string;
+  description: string;
+  about: string[];
+  responsibilities: string[];
+  requirements: string[];
+  status: string;
+}
 
 const manifestoPoints = [
   {
@@ -64,6 +74,22 @@ export default function CareersPage() {
   const router = useRouter();
   const [email, setEmail] = useState("");
   const [emailError, setEmailError] = useState("");
+  const [missions, setMissions] = useState<(CareerItem & { link: string })[]>([]);
+
+  React.useEffect(() => {
+    fetch("/api/careers")
+      .then((res) => res.json())
+      .then((json) => {
+        if (json.success && Array.isArray(json.data)) {
+          setMissions(
+            json.data
+              .filter((c: CareerItem) => c.status === "published")
+              .map((c: CareerItem) => ({ ...c, link: `/careers/${c.slug}` }))
+          );
+        }
+      })
+      .catch(() => {});
+  }, []);
 
   const validateCorporateEmail = (val: string) => {
     setEmail(val);
