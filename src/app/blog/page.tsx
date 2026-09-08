@@ -26,9 +26,6 @@ import {
 import { motion } from "framer-motion";
 import { useRouter } from "next/navigation";
 import blogBanner from "@/assets/blogs/banner.webp"
-import blog1 from "@/assets/blogs/1.webp"
-import blog2 from "@/assets/blogs/2.webp"
-import blog3 from "@/assets/blogs/3.webp"
 
 
 interface BlogPost {
@@ -57,48 +54,33 @@ export default function BlogPage() {
   const [selectedYear, setSelectedYear] = useState("all-years");
 
   useEffect(() => {
-    // Static blog posts
-    const staticPosts: BlogPost[] = [
-      {
-        blogs_id: 1,
-        title: "The Execution Gap: Why Enterprise AI Pilots Stall in \"POC Purgatory\"",
-        slug: "the-execution-gap",
-        banner: blog1.src,
-        outline: "The structural distance between a model that can answer a prompt and a system that can run a business. Discover how to bridge the chasm.",
-        content: "In the boardroom, the directive is clear: \"Implement AI.\" In the engineering bay, the reality is a fragmented mess of API keys, prompt engineering, and \"cool\" demos that never see the light of production. This is the Execution Gap-the structural distance between a model that can answer a prompt and a system that can run a business.",
-        reading_time: "6 min",
-        key_takeaways: "Deterministic vs Stochastic conflict, The API Tax, Agentic Workflows",
-        status: 1,
-        created_at: "2026-05-15T10:00:00.000Z",
-      },
-      {
-        blogs_id: 2,
-        title: "Defining the AI-Native OS: Why Software is Shifting from Modules to Kernels",
-        slug: "defining-ai-native-os",
-        banner: blog2.src,
-        outline: "Witness the shift from \"Software as an Application\" to \"Software as an Operating System\" and how the AI Kernel manages enterprise resources.",
-        content: "The last thirty years of enterprise software were defined by the \"Silo.\" In an AI-led world, Silos are the enemy of Intelligence. We are witnessing a shift to Software as an Operating System.",
-        reading_time: "7 min",
-        key_takeaways: "End of Silo Era, The Kernel Metaphor, Structural Alpha",
-        status: 1,
-        created_at: "2025-11-20T10:00:00.000Z",
-      },
-      {
-        blogs_id: 3,
-        title: "Compliance-as-Infrastructure: Inverting the Governance Model",
-        slug: "compliance-as-infrastructure",
-        banner: blog3.src,
-        outline: "Why a \"Post-Mortem\" audit is a liability and how to move compliance to the \"Edge\" of every interaction through real-time logic.",
-        content: "In the high-velocity world of business, compliance has traditionally been the \"handbrake\" on innovation. Guardian moves the compliance layer to the \"Edge\" of the interaction.",
-        reading_time: "8 min",
-        key_takeaways: "Preventive Governance, Policy-as-Logic, Audit Trail of Everything",
-        status: 1,
-        created_at: "2025-08-10T10:00:00.000Z",
-      }
-    ];
-
-    setBlogPosts(staticPosts);
-    setLoading(false);
+    fetch("/api/blogs")
+      .then((res) => res.json())
+      .then((json) => {
+        if (json.success && Array.isArray(json.data)) {
+          setBlogPosts(
+            json.data
+              .filter((b: any) => b.status === "published")
+              .map((b: any) => ({
+                blogs_id: b.id,
+                title: b.title,
+                slug: b.slug,
+                banner: b.bannerUrl,
+                outline: b.outline,
+                content: b.content,
+                reading_time: b.readingTime,
+                key_takeaways: Array.isArray(b.keyTakeaways) ? b.keyTakeaways.join(", ") : b.keyTakeaways,
+                status: b.status === "published" ? 1 : 0,
+                created_at: b.publishedAt || b.createdAt,
+              }))
+          );
+        }
+        setLoading(false);
+      })
+      .catch(() => {
+        setError("Failed to load blogs");
+        setLoading(false);
+      });
   }, []);
 
   // Format date to display in a readable format

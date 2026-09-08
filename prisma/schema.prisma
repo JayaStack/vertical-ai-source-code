@@ -13,7 +13,7 @@ model BlogPost {
   title        String
   bannerUrl    String
   outline      String
-  content      String
+  content      Json
   readingTime  String
   keyTakeaways String[]
   author       String    @default("Admin")
