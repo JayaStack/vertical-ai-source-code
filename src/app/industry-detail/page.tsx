@@ -14,7 +14,7 @@ import PlatformIndustryFAQ from "@/components/landing-page/platform-industry-faq
 import TestimonialV3 from "@/components/landing-page/testimonial-v3";
 import IndustryUseCases from "@/components/landing-page/industry-use-cases";
 import IndustryVerticalProduct from "@/components/landing-page/industry-vertical-product";
-import industryFaqsData from "@/data/industry-faqs.json";
+
 
 
 
@@ -729,7 +729,7 @@ export default function IndustryPage() {
             <TestimonialV3 />
 
             {/* FAQ */}
-            <PlatformIndustryFAQ faqData={(industryFaqsData as any)[searchParams.get('slug') || 'bfsi'] || []} />
+            <PlatformIndustryFAQ scopeKey={searchParams.get('slug') || 'bfsi'} />
 
             {/* ================= 8️⃣ FINAL CTA - MODERN CINEMATIC ================= */}
             <section className="bg-white">

@@ -2,63 +2,27 @@ import React, { useState, useEffect, useRef } from 'react';
 import { Plus, Minus } from 'lucide-react';
 
 export interface FAQItem {
-  faq_id: number | string;
+  id: string;
   question: string;
   answer: string;
-  category?: string;
-  status?: number;
-  created_date?: string;
+  category?: string | null;
+  scopeKey?: string | null;
 }
 
 interface PlatformIndustryFAQProps {
-  faqData?: FAQItem[];
+  scopeKey: string;
 }
 
-const defaultFaqs: FAQItem[] = [
-  {
-    faq_id: 1,
-    question: "How quickly can we go live?",
-    answer: "Less than 48 hours. Our pre-built industry playbooks allow for rapid deployment with minimal configuration.",
-    category: "General",
-    status: 1,
-    created_date: new Date().toISOString()
-  },
-  {
-    faq_id: 2,
-    question: "Is my data secure?",
-    answer: "Yes. We are SOC2, GDPR, and ISO 27001 compliant. Your data is encrypted at rest and in transit.",
-    category: "Security",
-    status: 1,
-    created_date: new Date().toISOString()
-  },
-  {
-    faq_id: 3,
-    question: "Can I integrate with my existing CRM?",
-    answer: "Absolutely. We offer native integrations with Salesforce, HubSpot, Zoho, and any system via REST API.",
-    category: "Integration",
-    status: 1,
-    created_date: new Date().toISOString()
-  },
-  {
-    faq_id: 4,
-    question: "What channels do you support?",
-    answer: "Voice, WhatsApp, SMS, Email, and Webchat - all orchestrated from a single platform.",
-    category: "Product",
-    status: 1,
-    created_date: new Date().toISOString()
-  },
-  {
-    faq_id: 5,
-    question: "How does the pricing work?",
-    answer: "We offer a usage-based pricing model. You only pay for the conversations and outcomes you generate.",
-    category: "Pricing",
-    status: 1,
-    created_date: new Date().toISOString()
-  }
-];
+const PlatformIndustryFAQ: React.FC<PlatformIndustryFAQProps> = ({ scopeKey }) => {
+  const [faqs, setFaqs] = useState<FAQItem[]>([]);
 
-const PlatformIndustryFAQ: React.FC<PlatformIndustryFAQProps> = ({ faqData = defaultFaqs }) => {
-  const faqs = faqData;
+  useEffect(() => {
+    if (!scopeKey) return;
+    fetch(`/api/faqs?scopeKey=${scopeKey}`)
+      .then(res => res.json())
+      .then(json => { if (json.success) setFaqs(json.data); })
+      .catch(console.error);
+  }, [scopeKey]);
   const [openIndex, setOpenIndex] = useState<number | null>(0);
   const [visibleItems, setVisibleItems] = useState<number[]>([]);
   const [isMounted, setIsMounted] = useState(false);
@@ -171,7 +135,7 @@ const PlatformIndustryFAQ: React.FC<PlatformIndustryFAQProps> = ({ faqData = def
         <div className="w-full">
           {faqs.map((faq, index) => (
             <div
-              key={faq.faq_id}
+              key={faq.id}
               ref={(el) => { accordionRefs.current[index] = el; }}
               style={getAnimationStyle(index)}
               className="group border-b border-gray-200 last:border-0 origin-top"

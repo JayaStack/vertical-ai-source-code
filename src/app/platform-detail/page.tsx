@@ -24,7 +24,7 @@ import HowItWorks2 from "@/components/landing-page/how-it-works-2";
 import IntelligenceLayer from "@/components/landing-page/intelligence-layer";
 import PlatformIndustryFAQ from "@/components/landing-page/platform-industry-faq";
 import TestimonialV3 from "@/components/landing-page/testimonial-v3";
-import platformFaqsData from "@/data/platform-faqs.json";
+
 
 export default function PlatformDetailPage() {
     const router = useRouter();
@@ -473,7 +473,7 @@ export default function PlatformDetailPage() {
             <TestimonialV3 />
 
             {/* FAQ */}
-            <PlatformIndustryFAQ faqData={(platformFaqsData as any)[searchParams.get('slug') || 'maestro'] || []} />
+            <PlatformIndustryFAQ scopeKey={searchParams.get('slug') || 'maestro'} />
 
             {/* 7. CTA - MODERN CINEMATIC */}
             <section className="bg-white">

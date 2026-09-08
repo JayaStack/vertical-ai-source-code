@@ -1,78 +1,30 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { ArrowRight, ChevronDown, HelpCircle } from 'lucide-react';
+import { ArrowRight, ChevronDown } from 'lucide-react';
 import { useRouter } from 'next/navigation';
-import { Button } from '../ui/button';
 
 interface FAQItem {
-  faq_id: number;
+  id: string;
   question: string;
   answer: string;
-  category: string;
-  status: number;
-  created_date: string;
+  category: string | null;
+  status: string;
+  createdAt: string;
 }
 
 const FAQSection: React.FC = () => {
   const router = useRouter();
   const [openIndex, setOpenIndex] = useState<number | null>(0);
   const [visibleItems, setVisibleItems] = useState<number[]>([]);
-  // Initialize with static data
-  const [faqs, setFaqs] = useState<FAQItem[]>([
-    {
-      faq_id: 1,
-      question: "What makes The Vertical AI Different from standard AI chatbots?",
-      answer: "Standard bots only converse; we execute. Our Maestro OS acts as a control plane for enterprise execution, orchestrating actions across AI, humans, and legacy systems (CRM/ERP) to drive measurable outcomes, not just replies.",
-      category: "Platform",
-      status: 1,
-      created_date: new Date().toISOString()
-    },
-    {
-      faq_id: 2,
-      question: "How does <500ms latency benefit my business?",
-      answer: "In high-stakes industries like BFSI and Sales, every millisecond counts. Our <500ms real-time decision latency ensures AI interactions feel human-like and instantaneous, significantly increasing conversion rates and customer trust.",
-      category: "Performance",
-      status: 1,
-      created_date: new Date().toISOString()
-    },
-    {
-      faq_id: 3,
-      question: "How do you handle governance and regulatory compliance?",
-      answer: "Governance is built-in via our Guardian OS. It enforces enterprise policies and audits every interaction in real-time across voice and digital channels, ensuring 100% compliance before any system action is taken.",
-      category: "Security",
-      status: 1,
-      created_date: new Date().toISOString()
-    },
-    {
-      faq_id: 4,
-      question: "Can the platform integrate with our existing legacy systems?",
-      answer: "Yes. Maestro provides zero-disruption deployment across API, on-prem, and hybrid systems. We unify 100+ integrations across legacy ERPs, CRMs, and data lakes into a single, cohesive execution layer.",
-      category: "Integration",
-      status: 1,
-      created_date: new Date().toISOString()
-    },
-    {
-      faq_id: 5,
-      question: "Does your Voice OS support regional languages?",
-      answer: "Conversa OS supports 36+ languages with pre-trained, domain-adaptive intelligence. This allows enterprises to scale empathetic, context-aware conversations across global and regional markets with zero manual effort.",
-      category: "Global Reach",
-      status: 1,
-      created_date: new Date().toISOString()
-    },
-    {
-      faq_id: 6,
-      question: "What is the expected ROI and deployment timeline?",
-      answer: "Most enterprises see a 3-5x operational efficiency improvement and 10-20x faster deployment cycles compared to traditional AI projects. Deployment often takes days, with continuous learning loops improving outcomes by 20-30% over time.",
-      category: "Business Value",
-      status: 1,
-      created_date: new Date().toISOString()
-    }
-  ]);
+  const [faqs, setFaqs] = useState<FAQItem[]>([]);
   const [isMounted, setIsMounted] = useState(false);
   const accordionRefs = useRef<(HTMLDivElement | null)[]>([]);
 
-  // Set mounted state after hydration to prevent hydration mismatches
   useEffect(() => {
     setIsMounted(true);
+    fetch('/api/faqs?scopeKey=landing')
+      .then((res) => res.json())
+      .then((json) => { if (json.success) setFaqs(json.data); })
+      .catch(console.error);
   }, []);
 
   // Intersection Observer for scroll animations (both directions)
@@ -169,7 +121,7 @@ const FAQSection: React.FC = () => {
           <div className="lg:col-span-7 flex flex-col gap-3.5 sm:gap-4 2xl:gap-5 w-full">
             {faqs.map((faq, index) => (
               <div
-                key={faq.faq_id}
+                key={faq.id}
                 ref={(el) => { accordionRefs.current[index] = el; }}
                 style={getAnimationStyle(index)}
                 className="rounded-xl 2xl:rounded-2xl bg-gray-50/80 border border-gray-200 shadow-sm transition-all duration-300 hover:bg-primary/5 origin-top overflow-hidden"
