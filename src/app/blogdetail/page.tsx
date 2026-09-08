@@ -96,6 +96,7 @@ function BlogDetailContent() {
   if (loading) return <div className="py-32 text-center text-xl text-gray-600">Loading insight...</div>;
   if (!data) return <div className="py-32 text-center text-xl text-gray-600">Blog post not found.</div>;
 
+  const articleSections: any[] = Array.isArray(data.articleSections) && data.articleSections.length > 0 ? data.articleSections : [];
   const sections: Section[] = Array.isArray(data.content) ? data.content : [];
 
   return (
@@ -141,10 +142,41 @@ function BlogDetailContent() {
         </div>
       </div>
 
-      {/* Structured Content */}
-      <article className="max-w-none">
-        {sections.map((section, index) => renderSection(section, index))}
-      </article>
+      {/* Article Sections (primary) */}
+      {articleSections.length > 0 ? (
+        <article className="max-w-none">
+          {articleSections.map((section: any) => (
+            <div key={section.id} className="mb-10">
+              {section.title && (
+                <h3 className="text-3xl font-bold mt-12 mb-6 text-gray-900 tracking-tight">
+                  {section.title}
+                </h3>
+              )}
+              {section.imageUrl && (
+                <div className="my-8 rounded-2xl overflow-hidden aspect-video relative shadow-xl">
+                  <img
+                    src={section.imageUrl}
+                    alt={section.imageAlt || section.title}
+                    className="object-cover w-full h-full hover:scale-105 transition-transform duration-700"
+                  />
+                </div>
+              )}
+              {section.quote && (
+                <blockquote className="border-l-4 border-primary pl-6 my-6 italic text-gray-600 text-lg">
+                  {section.quote}
+                </blockquote>
+              )}
+              {section.content && (
+                <p className="text-lg text-gray-700 leading-relaxed">{section.content}</p>
+              )}
+            </div>
+          ))}
+        </article>
+      ) : (
+        <article className="max-w-none">
+          {sections.map((section, index) => renderSection(section, index))}
+        </article>
+      )}
 
       {/* Author Bio Box */}
       <div className="mt-16 bg-gray-50 border border-gray-100 rounded-2xl p-8 shadow-sm hover:shadow-md transition-shadow">

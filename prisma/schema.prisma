@@ -8,21 +8,23 @@ datasource db {
 }
 
 model BlogPost {
-  id           String    @id
-  slug         String    @unique
-  title        String
-  bannerUrl    String
-  outline      String
-  content      Json
-  readingTime  String
-  keyTakeaways String[]
-  author       String    @default("Admin")
-  category     String
-  tags         String[]
-  status       String    @default("draft")
-  publishedAt  DateTime?
-  createdAt    DateTime  @default(now())
-  updatedAt    DateTime
+  id              String    @id
+  slug            String    @unique
+  title           String
+  bannerUrl       String
+  outline         String
+  content         Json
+  readingTime     String
+  keyTakeaways    String[]
+  author          String    @default("Admin")
+  category        String
+  tags            String[]
+  status          String    @default("draft")
+  publishedAt     DateTime?
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime
+  articleSections Json      @default("[]")
+  excerpt         String    @default("")
 }
 
 model CaseStudy {
