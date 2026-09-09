@@ -209,3 +209,30 @@ model LegalDocument {
   createdAt    DateTime  @default(now())
   updatedAt    DateTime
 }
+
+model WhyFramework {
+  id                      String   @id
+  slug                    String   @unique
+  categoryBadge           String   @default("")
+  heroBannerText          String   @default("")
+  mainHeading             String   @default("")
+  introDescription        String   @default("")
+  heroBannerImageUrl      String   @default("")
+  featuredContentImageUrl String   @default("")
+  sec1Tag                 String   @default("")
+  sec1Heading             String   @default("")
+  sec1Text                String   @default("")
+  sec2Tag                 String   @default("")
+  sec2Heading             String   @default("")
+  sec2Text                String   @default("")
+  componentsHeading       String   @default("")
+  componentsSubheading    String   @default("")
+  capabilities            String[]
+  sec3Tag                 String   @default("")
+  sec3Heading             String   @default("")
+  sec3Text                String   @default("")
+  results                 Json     @default("[]")
+  status                  String   @default("published")
+  createdAt               DateTime @default(now())
+  updatedAt               DateTime
+}

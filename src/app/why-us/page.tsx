@@ -1,6 +1,6 @@
 "use client";
 
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { motion } from "framer-motion";
 import Header from "@/components/landing-page/header";
 import PageHero from "@/components/landing-page/page-hero";
@@ -8,9 +8,28 @@ import LandingPageFooter from "@/components/landing-page/landing-page-footer";
 import Image from "next/image";
 import { Shield, ArrowRight, Target, Lightbulb, TrendingUpIcon } from "lucide-react";
 import Link from "next/link";
-import { whyUsFeatures as features } from "@/lib/constants";
+
+interface WhyFrameworkCard {
+  id: string;
+  slug: string;
+  categoryBadge: string;
+  heroBannerText: string;
+  mainHeading: string;
+  introDescription: string;
+  heroBannerImageUrl: string;
+}
 
 export default function WhyUsPage() {
+  const [features, setFeatures] = useState<WhyFrameworkCard[]>([]);
+
+  useEffect(() => {
+    fetch("/api/why-framework")
+      .then((res) => res.json())
+      .then((json) => {
+        if (json.success) setFeatures(json.data);
+      })
+      .catch(console.error);
+  }, []);
 
   return (
     <div className="min-h-screen bg-white">
@@ -46,24 +65,25 @@ export default function WhyUsPage() {
         {/* Features Grid Overview */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {features.map((feature, idx) => {
-            const Icon = feature.icon;
+            const icons = [Shield, Target, Lightbulb, TrendingUpIcon];
+            const Icon = icons[idx % icons.length];
             return (
               <Link
                 key={feature.id}
-                href={`/why-us/${feature.id}`}
+                href={`/why-us/${feature.slug}`}
                 className="group relative flex flex-col p-8 rounded-[2rem] bg-gray-50 border border-transparent hover:bg-white hover:border-gray-100 hover:shadow-[0_20px_50px_rgba(250,139,57,0.12)] transition-all duration-500 overflow-hidden"
               >
                 {/* Visual Header */}
                 <div className="relative w-full h-48 rounded-xl overflow-hidden mb-8">
                   <Image
-                    src={feature.bannerImage}
-                    alt={feature.title}
+                    src={feature.heroBannerImageUrl}
+                    alt={feature.heroBannerText}
                     fill
                     className="object-cover transition-transform duration-[2s] group-hover:scale-110"
                     sizes="(max-width: 768px) 100vw, 33vw"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
-                  
+
                   <div className="absolute bottom-4 left-4 w-12 h-12 rounded-xl bg-white text-primary flex items-center justify-center shadow-lg">
                     <Icon size={24} strokeWidth={1.5} />
                   </div>
@@ -71,13 +91,13 @@ export default function WhyUsPage() {
 
                 <div className="flex-1">
                   <h3 className="text-2xl font-bold text-gray-900 mb-3 group-hover:text-primary transition-colors">
-                    {feature.title}
+                    {feature.heroBannerText}
                   </h3>
                   <p className="text-sm font-medium text-primary mb-4">
-                    {feature.subtitle}
+                    {feature.mainHeading}
                   </p>
                   <p className="text-gray-500 line-clamp-3 leading-relaxed">
-                    {feature.description}
+                    {feature.introDescription}
                   </p>
                 </div>
 

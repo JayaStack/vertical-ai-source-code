@@ -1,6 +1,6 @@
 "use client";
 
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import Header from "@/components/landing-page/header";
 import PageHero from "@/components/landing-page/page-hero";
 import LandingPageFooter from "@/components/landing-page/landing-page-footer";
@@ -9,50 +9,84 @@ import Link from "next/link";
 import { Target, Lightbulb, TrendingUpIcon, CheckCircle2, ArrowRight } from "lucide-react";
 import { motion } from "framer-motion";
 
-import { whyUsFeatures as features } from "@/lib/constants";
-import { notFound } from "next/navigation";
+interface WhyFrameworkPillar {
+  heroBannerText: string;
+  mainHeading: string;
+  introDescription: string;
+  heroBannerImageUrl: string;
+  featuredContentImageUrl: string;
+  sec1Tag: string;
+  sec1Heading: string;
+  sec1Text: string;
+  sec2Tag: string;
+  sec2Heading: string;
+  sec2Text: string;
+  componentsHeading: string;
+  componentsSubheading: string;
+  capabilities: string[];
+  sec3Tag: string;
+  sec3Heading: string;
+  sec3Text: string;
+  results: { label: string; value: string }[];
+}
 
 export default function FeatureClientPage({ slug }: { slug: string }) {
-  const feature = features.find(f => f.id === slug);
+  const [feature, setFeature] = useState<WhyFrameworkPillar | null>(null);
+  const [notFoundState, setNotFoundState] = useState(false);
 
-  if (!feature) {
-    notFound();
+  useEffect(() => {
+    fetch(`/api/why-framework?slug=${encodeURIComponent(slug)}`)
+      .then((res) => res.json())
+      .then((json) => {
+        if (json.success && json.data?.length > 0) {
+          setFeature(json.data[0]);
+        } else {
+          setNotFoundState(true);
+        }
+      })
+      .catch(() => setNotFoundState(true));
+  }, [slug]);
+
+  if (notFoundState) {
+    return <div className="min-h-screen bg-white flex items-center justify-center text-gray-500">Pillar not found.</div>;
   }
 
-  const Icon = feature.icon;
+  if (!feature) {
+    return <div className="min-h-screen bg-white flex items-center justify-center text-gray-500">Loading...</div>;
+  }
 
   return (
     <div className="min-h-screen bg-white font-sans selection:bg-primary/20">
       <Header visible={true} />
 
       <PageHero
-        title={feature.title}
-        backgroundImage={feature.bannerImage.src}
+        title={feature.heroBannerText}
+        backgroundImage={feature.heroBannerImageUrl}
       />
 
       <main className="max-w-5xl mx-auto px-6 pt-16 md:pt-24">
         <div className="flex flex-col gap-10 md:gap-14">
-          
+
           {/* Main Editorial Content */}
           <div className="w-full">
-            
+
             {/* Header Section */}
-            <motion.header 
+            <motion.header
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               className="mb-8 md:mb-12"
             >
               <h2 className="text-3xl md:text-5xl font-bold text-gray-900 mb-4">
-                {feature.subtitle}
+                {feature.mainHeading}
               </h2>
               <p className="text-base md:text-lg text-gray-500 leading-relaxed">
-                {feature.description}
+                {feature.introDescription}
               </p>
             </motion.header>
 
             {/* Featured Image Section */}
-            <motion.div 
+            <motion.div
               initial={{ opacity: 0, scale: 0.95 }}
               whileInView={{ opacity: 1, scale: 1 }}
               viewport={{ once: true }}
@@ -60,8 +94,8 @@ export default function FeatureClientPage({ slug }: { slug: string }) {
               className="relative w-full aspect-[16/9] md:aspect-[21/9] rounded-2xl overflow-hidden mb-12 md:mb-20 shadow-2xl shadow-gray-900/5 border border-gray-100"
             >
               <Image
-                src={feature.contentImage}
-                alt={feature.title}
+                src={feature.featuredContentImageUrl}
+                alt={feature.heroBannerText}
                 fill
                 className="object-cover"
                 priority
@@ -71,8 +105,8 @@ export default function FeatureClientPage({ slug }: { slug: string }) {
 
             {/* Metrics Grid - Dense & Authoritative */}
             <section className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-16 md:mb-24">
-              {feature.metrics.map((metric, i) => (
-                <motion.div 
+              {feature.results.map((metric, i) => (
+                <motion.div
                   key={i}
                   initial={{ opacity: 0, y: 20 }}
                   whileInView={{ opacity: 1, y: 0 }}
@@ -88,7 +122,7 @@ export default function FeatureClientPage({ slug }: { slug: string }) {
 
             {/* Detailed Analysis - Strategic & Technical */}
             <div className="grid grid-cols-1 md:grid-cols-1 gap-8 md:gap-12 mb-16 md:mb-24">
-              <motion.div 
+              <motion.div
                 initial={{ opacity: 0, x: -20 }}
                 whileInView={{ opacity: 1, x: 0 }}
                 viewport={{ once: true }}
@@ -96,14 +130,14 @@ export default function FeatureClientPage({ slug }: { slug: string }) {
               >
                 <div className="inline-flex items-center gap-2 text-primary font-bold text-xs sm:text-base ">
                   <Target size={14} />
-                  <span>Strategic Capabilities</span>
+                  <span>{feature.sec1Tag}</span>
                 </div>
-                <h3 className="text-2xl font-bold text-gray-900 leading-tight">Functional Domain & Scope</h3>
+                <h3 className="text-2xl font-bold text-gray-900 leading-tight">{feature.sec1Heading}</h3>
                 <p className="text-gray-600 leading-relaxed text-lg">
-                  {feature.challenge}
+                  {feature.sec1Text}
                 </p>
               </motion.div>
-              <motion.div 
+              <motion.div
                 initial={{ opacity: 0, x: 20 }}
                 whileInView={{ opacity: 1, x: 0 }}
                 viewport={{ once: true }}
@@ -111,17 +145,17 @@ export default function FeatureClientPage({ slug }: { slug: string }) {
               >
                 <div className="inline-flex items-center gap-2 text-primary font-bold text-xs sm:text-base ">
                   <Lightbulb size={14} />
-                  <span>Technical Specifications</span>
+                  <span>{feature.sec2Tag}</span>
                 </div>
-                <h3 className="text-2xl font-bold text-gray-900 leading-tight">Architecture & Logic</h3>
+                <h3 className="text-2xl font-bold text-gray-900 leading-tight">{feature.sec2Heading}</h3>
                 <p className="text-gray-600 leading-relaxed text-lg">
-                  {feature.solution}
+                  {feature.sec2Text}
                 </p>
               </motion.div>
             </div>
 
             {/* Capabilities Row */}
-            <motion.section 
+            <motion.section
               initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
@@ -130,9 +164,9 @@ export default function FeatureClientPage({ slug }: { slug: string }) {
               <div className="absolute top-0 right-0 w-64 h-64 bg-primary/20 rounded-full blur-[100px] -translate-y-1/2 translate-x-1/2"></div>
               <div className="relative z-10 flex flex-col md:flex-row items-center gap-12">
                 <div className="md:w-1/3 text-center md:text-left">
-                  <h3 className="text-2xl font-bold mb-4">Core Components</h3>
+                  <h3 className="text-2xl font-bold mb-4">{feature.componentsHeading}</h3>
                   <p className="text-gray-400 text-sm leading-relaxed">
-                    Advanced technical primitives designed for deep enterprise integration.
+                    {feature.componentsSubheading}
                   </p>
                 </div>
                 <div className="md:w-2/3 flex flex-wrap justify-center md:justify-start gap-4">
@@ -147,7 +181,7 @@ export default function FeatureClientPage({ slug }: { slug: string }) {
             </motion.section>
 
             {/* Impact Section */}
-            <motion.section 
+            <motion.section
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
@@ -155,13 +189,13 @@ export default function FeatureClientPage({ slug }: { slug: string }) {
             >
                 <div className="inline-flex items-center gap-2 text-primary font-bold text-xs sm:text-base mb-6">
                 <TrendingUpIcon size={14} />
-                <span>Enterprise Impact</span>
+                <span>{feature.sec3Tag}</span>
               </div>
               <h3 className="text-2xl md:text-3xl font-bold text-gray-900 mb-6 md:mb-8 leading-tight">
-                Driving Performance at Scale
+                {feature.sec3Heading}
               </h3>
               <p className="text-lg md:text-xl text-gray-600 leading-relaxed mb-12">
-                {feature.results}
+                {feature.sec3Text}
               </p>
             </motion.section>
 
