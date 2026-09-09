@@ -160,3 +160,39 @@ model Industry {
   createdAt                DateTime @default(now())
   updatedAt                DateTime
 }
+
+model PlatformOs {
+  id                     String   @id
+  slug                   String   @unique
+  name                   String
+  status                 String   @default("published")
+  heroTitle              String   @default("")
+  heroTitleHighlight     String   @default("")
+  heroDescription        String   @default("")
+  heroImageUrl           String   @default("")
+  clientsDescription     String   @default("")
+  clientLogos            String[]
+  whyTitle               String   @default("")
+  whyTitleHighlight      String   @default("")
+  whyDescription         String   @default("")
+  whySteps               Json     @default("[]")
+  intelTitle             String   @default("")
+  intelTitleHighlight    String   @default("")
+  intelDescription       String   @default("")
+  intelSteps             Json     @default("[]")
+  useCasesTitle          String   @default("")
+  useCasesTitleHighlight String   @default("")
+  useCasesCards          Json     @default("[]")
+  impactTitle            String   @default("")
+  impactTitleHighlight   String   @default("")
+  impactMetrics          Json     @default("[]")
+  securityTitle          String   @default("")
+  securityTitleHighlight String   @default("")
+  securityDescription    String   @default("")
+  securityFeatures       Json     @default("[]")
+  securityGridItems      String[]
+  ctaTitle               String   @default("")
+  ctaTitleHighlight      String   @default("")
+  createdAt              DateTime @default(now())
+  updatedAt              DateTime
+}

@@ -36,11 +36,56 @@ export default function PlatformDetailPage() {
         const slug = searchParams.get('slug') || 'maestro';
         setLoading(true);
 
-        fetch(`https://theverticalai.top/App/api.php?gofor=platformdetail&slug=${slug}`)
+        fetch(`/api/platforms?slug=${encodeURIComponent(slug)}`)
             .then(res => res.json())
-            .then(resData => {
-                if (resData && resData.full_content) {
-                    setData(JSON.parse(resData.full_content));
+            .then(json => {
+                const row = json?.success ? json.data?.[0] : null;
+                if (row) {
+                    setData({
+                        hero: {
+                            title: row.heroTitle,
+                            titleHighlight: row.heroTitleHighlight,
+                            description: row.heroDescription,
+                            image: row.heroImageUrl,
+                        },
+                        trustedClients: {
+                            description: row.clientsDescription,
+                            logos: row.clientLogos || [],
+                        },
+                        howItWorks: {
+                            title: row.whyTitle,
+                            titleHighlight: row.whyTitleHighlight,
+                            description: row.whyDescription,
+                            steps: row.whySteps || [],
+                        },
+                        intelligenceLayer: {
+                            title: row.intelTitle,
+                            titleHighlight: row.intelTitleHighlight,
+                            description: row.intelDescription,
+                            steps: row.intelSteps || [],
+                        },
+                        useCases: {
+                            sectionTitle: row.useCasesTitle,
+                            sectionTitleHighlight: row.useCasesTitleHighlight,
+                            cards: row.useCasesCards || [],
+                        },
+                        measurableImpact: {
+                            sectionTitle: row.impactTitle,
+                            sectionTitleHighlight: row.impactTitleHighlight,
+                            stats: row.impactMetrics || [],
+                        },
+                        securityCompliance: {
+                            sectionTitle: row.securityTitle,
+                            sectionTitleHighlight: row.securityTitleHighlight,
+                            description: row.securityDescription,
+                            features: row.securityFeatures || [],
+                            gridItems: (row.securityGridItems || []).map((title: string) => ({ title })),
+                        },
+                        cta: {
+                            title: row.ctaTitle,
+                            titleHighlight: row.ctaTitleHighlight,
+                        },
+                    });
                 } else {
                     setData(null);
                 }
@@ -332,40 +377,43 @@ export default function PlatformDetailPage() {
                             transition={{ duration: 0.6, delay: 0.1 }}
                             className="text-3xl md:text-5xl text-gray-900 "
                         >
-                            Going Beyond Simple Automation <br />
-                            <span className="text-primary font-semibold">Driving Exponential Results.</span>
+                            {data.measurableImpact?.sectionTitle} <br />
+                            <span className="text-primary font-semibold">{data.measurableImpact?.sectionTitleHighlight}</span>
                         </motion.h2>
                     </div>
 
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-                        {[
-                            { num: "40", sym: "%", label: "Cost Reduction", desc: "Lowering voice ops overhead costs through AI.", icon: TrendingDown },
-                            { num: "28", sym: "%", label: "Higher Recovery", desc: "Increasing successful collections and follow-ups.", icon: Activity },
-                            { num: "60", sym: "%", label: "Faster Response", desc: "Reducing customer wait times significantly.", icon: Zap },
-                            { num: "24", sym: "/7", label: "Operation", desc: "Round-the-clock support without human intervention.", icon: Clock },
-                        ].map((stat, i) => (
-                            <motion.div
-                                key={i}
-                                initial={{ opacity: 0, scale: 0.95 }}
-                                whileInView={{ opacity: 1, scale: 1 }}
-                                viewport={{ once: true }}
-                                transition={{ duration: 0.5, delay: i * 0.1 }}
-                                className="relative group p-8 rounded-[32px] bg-gray-100 border border-gray-100 hover:bg-white hover:border-white hover:shadow-2xl hover:shadow-gray-200/50 transition-all duration-500"
-                            >
-                                <div className="w-14 h-14 rounded-2xl mb-8 flex items-center justify-center shadow-sm transition-all duration-500 bg-white border border-gray-100 text-gray-400 group-hover:bg-accent group-hover:text-white group-hover:rotate-6 group-hover:shadow-lg group-hover:shadow-accent/20">
-                                    <stat.icon className="w-7 h-7" />
-                                </div>
-                                <div className="space-y-3">
-                                    <div className="text-5xl font-semibold text-primary flex items-baseline gap-1">
-                                        <Counter target={parseInt(stat.num)} />
-                                        <span className="text-2xl font-bold text-accent transition-transform duration-500 group-hover:-translate-y-1">{stat.sym}</span>
-                                    </div>
-                                    <div className="font-bold text-gray-600 text-lg group-hover:text-primary transition-colors">{stat.label}</div>
-                                    <p className="text-gray-500 text-sm leading-relaxed">{stat.desc}</p>
-                                </div>
+                        {(data.measurableImpact?.stats || []).map((stat: any, i: number) => {
+                            const statIcons = [TrendingDown, Activity, Zap, Clock];
+                            const Icon = statIcons[i % statIcons.length];
+                            const match = String(stat.value).match(/[\d.]+/);
+                            const num = match ? parseInt(match[0], 10) : 0;
+                            const sym = match ? String(stat.value).slice((match.index || 0) + match[0].length) : String(stat.value);
 
-                            </motion.div>
-                        ))}
+                            return (
+                                <motion.div
+                                    key={i}
+                                    initial={{ opacity: 0, scale: 0.95 }}
+                                    whileInView={{ opacity: 1, scale: 1 }}
+                                    viewport={{ once: true }}
+                                    transition={{ duration: 0.5, delay: i * 0.1 }}
+                                    className="relative group p-8 rounded-[32px] bg-gray-100 border border-gray-100 hover:bg-white hover:border-white hover:shadow-2xl hover:shadow-gray-200/50 transition-all duration-500"
+                                >
+                                    <div className="w-14 h-14 rounded-2xl mb-8 flex items-center justify-center shadow-sm transition-all duration-500 bg-white border border-gray-100 text-gray-400 group-hover:bg-accent group-hover:text-white group-hover:rotate-6 group-hover:shadow-lg group-hover:shadow-accent/20">
+                                        <Icon className="w-7 h-7" />
+                                    </div>
+                                    <div className="space-y-3">
+                                        <div className="text-5xl font-semibold text-primary flex items-baseline gap-1">
+                                            <Counter target={num} />
+                                            <span className="text-2xl font-bold text-accent transition-transform duration-500 group-hover:-translate-y-1">{sym}</span>
+                                        </div>
+                                        <div className="font-bold text-gray-600 text-lg group-hover:text-primary transition-colors">{stat.label}</div>
+                                        <p className="text-gray-500 text-sm leading-relaxed">{stat.description}</p>
+                                    </div>
+
+                                </motion.div>
+                            );
+                        })}
                     </div>
                 </div>
             </section>
@@ -383,8 +431,8 @@ export default function PlatformDetailPage() {
                                     transition={{ duration: 0.6, delay: 0.1 }}
                                     className="text-3xl md:text-5xl text-gray-900  font-semibold mb-6"
                                 >
-                                    Governance Built Into <br />
-                                    <span className="text-primary font-semibold">Every Action.</span>
+                                    {data.securityCompliance?.sectionTitle} <br />
+                                    <span className="text-primary font-semibold">{data.securityCompliance?.sectionTitleHighlight}</span>
                                 </motion.h2>
                                 <motion.p
                                     initial={{ opacity: 0, y: 20 }}
@@ -393,76 +441,80 @@ export default function PlatformDetailPage() {
                                     transition={{ duration: 0.6, delay: 0.2 }}
                                     className="text-gray-500 text-lg md:text-xl font-medium leading-relaxed max-w-2xl"
                                 >
-                                    From data to decisions to execution - every action is enforced, validated, and auditable in real time across AI, humans, and enterprise systems.
+                                    {data.securityCompliance?.description}
                                 </motion.p>
                             </div>
 
                             <div className="grid sm:grid-cols-2 gap-6">
-                                {[
-                                    { icon: ShieldCheck, title: "SOC 2", desc: "Audit-ready controls and processes." },
-                                    { icon: Lock, title: "GDPR", desc: "Privacy by design and data subject rights." },
-                                    { icon: Award, title: "ISO-ready", desc: "Information security management standards." },
-                                    { icon: Activity, title: "HIPAA Ready", desc: "Secure handling of health information." },
-                                    { icon: Globe, title: "Data Residency", desc: "Regional data processing and storage." },
-                                ].map((item, i) => (
-                                    <motion.div
-                                        key={i}
-                                        initial={{ opacity: 0, x: -30 }}
-                                        whileInView={{ opacity: 1, x: 0 }}
-                                        viewport={{ once: true }}
-                                        transition={{ duration: 0.5, delay: i * 0.1 }}
-                                        className="flex gap-5"
-                                    >
-                                        <div className="shrink-0 w-12 h-12 rounded-lg bg-primary/20 flex items-center justify-center mt-1">
-                                            <item.icon className="w-6 h-6 text-primary" />
-                                        </div>
-                                        <div className="space-y-1">
-                                            <div className="font-bold text-gray-600">{item.title}</div>
-                                            <div className="text-sm text-gray-500">{item.desc}</div>
-                                        </div>
-                                    </motion.div>
-                                ))}
+                                {(data.securityCompliance?.features || []).map((item: any, i: number) => {
+                                    const featureIcons = [ShieldCheck, Lock, Award, Activity, Globe];
+                                    const Icon = featureIcons[i % featureIcons.length];
+                                    return (
+                                        <motion.div
+                                            key={i}
+                                            initial={{ opacity: 0, x: -30 }}
+                                            whileInView={{ opacity: 1, x: 0 }}
+                                            viewport={{ once: true }}
+                                            transition={{ duration: 0.5, delay: i * 0.1 }}
+                                            className="flex gap-5"
+                                        >
+                                            <div className="shrink-0 w-12 h-12 rounded-lg bg-primary/20 flex items-center justify-center mt-1">
+                                                <Icon className="w-6 h-6 text-primary" />
+                                            </div>
+                                            <div className="space-y-1">
+                                                <div className="font-bold text-gray-600">{item.title}</div>
+                                                <div className="text-sm text-gray-500">{item.description}</div>
+                                            </div>
+                                        </motion.div>
+                                    );
+                                })}
                             </div>
                         </div>
 
                         <div className="flex-1 relative w-full lg:max-w-lg">
                             <div className="absolute -inset-10 bg-primary/10 blur-3xl rounded-full opacity-50" />
                             <div className="relative grid grid-cols-2 gap-4 md:gap-6">
-                                {[
-                                    { icon: ShieldCheck, title: "Policy Enforcement", color: "bg-primary", duration: 3, delay: 0 },
-                                    { icon: Lock, title: "Data Protection", color: "bg-accent", duration: 4, delay: 0.5 },
-                                    { icon: Server, title: "Sovereign Deployment", color: "bg-accent", duration: 3.5, delay: 0.2 },
-                                    { icon: Shield, title: "Full Auditability", color: "bg-primary", duration: 4.5, delay: 1 },
-                                ].map((gridItem, i) => (
-                                    <motion.div
-                                        key={i}
-                                        initial={{ opacity: 0, scale: 0.9 }}
-                                        whileInView={{
-                                            opacity: 1,
-                                            scale: 1,
-                                            y: [0, -15, 0], // Floating motion
-                                        }}
-                                        viewport={{ once: true }}
-                                        animate={{
-                                            y: [0, -12, 0],
-                                        }}
-                                        transition={{
-                                            delay: i * 0.1,
-                                            y: {
-                                                duration: gridItem.duration,
-                                                repeat: Infinity,
-                                                ease: "easeInOut",
-                                                delay: gridItem.delay
-                                            }
-                                        }}
-                                        className="bg-white p-4 md:p-6 rounded-2xl shadow-sm border border-gray-200 flex flex-col items-center justify-center text-center gap-4 group hover:shadow-2xl hover:border-primary/30 hover:-translate-y-2 transition-all duration-500"
-                                    >
-                                        <div className={`w-14 h-14 md:w-16 md:h-16 rounded-2xl flex items-center justify-center text-white shadow-lg group-hover:scale-110 transition-transform ${gridItem.color}`}>
-                                            <gridItem.icon className="w-7 h-7 md:w-8 md:h-8" />
-                                        </div>
-                                        <span className="font-bold text-gray-900">{gridItem.title}</span>
-                                    </motion.div>
-                                ))}
+                                {(data.securityCompliance?.gridItems || []).map((gridItem: any, i: number) => {
+                                    const gridVisuals = [
+                                        { icon: ShieldCheck, color: "bg-primary", duration: 3, delay: 0 },
+                                        { icon: Lock, color: "bg-accent", duration: 4, delay: 0.5 },
+                                        { icon: Server, color: "bg-accent", duration: 3.5, delay: 0.2 },
+                                        { icon: Shield, color: "bg-primary", duration: 4.5, delay: 1 },
+                                    ];
+                                    const visual = gridVisuals[i % gridVisuals.length];
+                                    const Icon = visual.icon;
+
+                                    return (
+                                        <motion.div
+                                            key={i}
+                                            initial={{ opacity: 0, scale: 0.9 }}
+                                            whileInView={{
+                                                opacity: 1,
+                                                scale: 1,
+                                                y: [0, -15, 0], // Floating motion
+                                            }}
+                                            viewport={{ once: true }}
+                                            animate={{
+                                                y: [0, -12, 0],
+                                            }}
+                                            transition={{
+                                                delay: i * 0.1,
+                                                y: {
+                                                    duration: visual.duration,
+                                                    repeat: Infinity,
+                                                    ease: "easeInOut",
+                                                    delay: visual.delay
+                                                }
+                                            }}
+                                            className="bg-white p-4 md:p-6 rounded-2xl shadow-sm border border-gray-200 flex flex-col items-center justify-center text-center gap-4 group hover:shadow-2xl hover:border-primary/30 hover:-translate-y-2 transition-all duration-500"
+                                        >
+                                            <div className={`w-14 h-14 md:w-16 md:h-16 rounded-2xl flex items-center justify-center text-white shadow-lg group-hover:scale-110 transition-transform ${visual.color}`}>
+                                                <Icon className="w-7 h-7 md:w-8 md:h-8" />
+                                            </div>
+                                            <span className="font-bold text-gray-900">{gridItem.title}</span>
+                                        </motion.div>
+                                    );
+                                })}
                             </div>
                         </div>
                     </div>
