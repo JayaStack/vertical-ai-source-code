@@ -196,3 +196,16 @@ model PlatformOs {
   createdAt              DateTime @default(now())
   updatedAt              DateTime
 }
+
+model LegalDocument {
+  id           String    @id
+  slug         String    @unique
+  title        String
+  supportEmail String    @default("")
+  bannerUrl    String    @default("")
+  content      String    @default("")
+  lastUpdated  DateTime?
+  status       String    @default("published")
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime
+}
