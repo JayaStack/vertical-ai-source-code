@@ -16,9 +16,6 @@ import {
 } from "@/components/ui/carousel"
 import Link from "next/link";
 import banner from "@/assets/casestudy/banner.webp"
-import CaseStudy1 from "@/assets/casestudy/1.webp"
-import CaseStudy2 from "@/assets/casestudy/2.webp"
-import CaseStudy3 from "@/assets/casestudy/3.webp"
 
 export default function CaseStudiesPage() {
   const router = useRouter()
@@ -30,39 +27,31 @@ export default function CaseStudiesPage() {
   const [canScrollNext, setCanScrollNext] = useState(false)
 
   useEffect(() => {
-    // Static data
-    const staticStudies = [
-      {
-        slug: "regulatory-guardrail",
-        banner_image_url: CaseStudy1,
-        title: "The Regulatory Guardrail: Real-Time Compliance",
-        industry: "BFSI",
-        client_name: "Top Private Bank",
-        kpi_primary_value: "92% Less Violations",
-        outcome: "Turned a 2% sampling gamble into 100% real-time compliance infrastructure."
-      },
-      {
-        slug: "customer-experience-os",
-        banner_image_url: CaseStudy2,
-        title: "Scaling Empathy for a 10M+ Telecom Giant",
-        industry: "Telecom",
-        client_name: "Tier-1 Provider",
-        kpi_primary_value: "65% Lower Cost",
-        outcome: "Replaced 7 fragmented legacy silos with a unified Multilingual Decision Engine."
-      },
-      {
-        slug: "precision-recovery-engine",
-        banner_image_url: CaseStudy3,
-        title: "The Precision Recovery Engine: High-Velocity Financial Recovery",
-        industry: "Finance",
-        client_name: "SME & Micro-lender",
-        kpi_primary_value: "45% Recovery Lift",
-        outcome: "Engineered a high-velocity recovery engine grounded in dignity and persona-based data."
-      }
-    ];
-
-    setCaseStudies(staticStudies)
-    setLoading(false)
+    fetch("/api/case-studies")
+      .then((res) => res.json())
+      .then((json) => {
+        if (json.success) {
+          const mapped = json.data.map((cs: any) => ({
+            slug: cs.slug,
+            banner_image_url: cs.headerImageUrl,
+            title: cs.storyTitle,
+            industry: cs.categoryBadge,
+            client_name: cs.breadcrumbTitle,
+            kpi_primary_value: cs.keyResults?.[0]
+              ? `${cs.keyResults[0].value} ${cs.keyResults[0].label}`
+              : "",
+            outcome: cs.testimonialQuote,
+          }));
+          setCaseStudies(mapped);
+        } else {
+          setError(json.error || "Failed to load case studies");
+        }
+        setLoading(false);
+      })
+      .catch((err) => {
+        setError(err?.message || "Failed to load case studies");
+        setLoading(false);
+      });
   }, [])
 
   useEffect(() => {

@@ -8,184 +8,75 @@ import { CheckCircle2, TrendingUpIcon, Activity, ChevronRight, ArrowRight, Clock
 import Link from "next/link";
 import Image from "next/image";
 
-const getCaseStudyDetail = (slug: string) => {
-  if (slug === 'regulatory-guardrail') {
-    return {
-      title: "The Regulatory Guardrail: Real-Time Compliance",
-      client: "Top Private Bank",
-      industry: "BFSI",
-      banner: "https://images.unsplash.com/photo-1550751827-4bd374c3f58b?q=80&w=2426",
-      metrics: [
-        { label: "Reduction in Violations", value: "92%" },
-        { label: "Audit Coverage", value: "100%" },
-        { label: "Compliance Coverage", value: "Real-time" }
-      ],
-      content: `
-      <p class="text-xl  text-gray-800 mb-10 border-l-4 border-primary pl-6 py-2">
-          "Compliance moved from a sampling exercise to 100% coverage. In the first two quarters, we reported zero major audit escalations."
-        </p>
-        
-        <h3 class="text-3xl font-bold mt-12 mb-6 text-gray-900 tracking-tight">The Context</h3>
-        <p class="mb-8 text-lg text-gray-700 leading-relaxed">
-          For a leading Indian private bank, compliance was a high-stakes lottery. With over 50,000 agents handling millions of multilingual interactions, manual auditing could only cover 2% of calls. This "98% blind spot" represented a massive regulatory risk and a potential multi-crore liability.
-        </p>
+interface CaseStudySection {
+  id?: number;
+  title?: string;
+  content?: string;
+  imageUrl?: string;
+  imageAlt?: string;
+  quote?: string;
+}
 
-        <h3 class="text-3xl font-bold mt-12 mb-6 text-gray-900 tracking-tight">The Structural Failure</h3>
-        <p class="mb-8 text-lg text-gray-700 leading-relaxed">
-          Legacy QA was a post-mortem process. By the time a violation was flagged, the damage was done. The bank needed to move from detecting mistakes to preventing them in the moment.
-        </p>
-        
-        <div class="my-12 rounded-2xl overflow-hidden aspect-[21/9] relative shadow-lg shine-effect">
-          <img src="https://images.unsplash.com/photo-1550751827-4bd374c3f58b?q=80&w=1600" alt="Banking Infrastructure" class="object-cover w-full h-full hover:scale-105 transition-transform duration-700" />
+function renderSection(section: CaseStudySection, index: number) {
+  return (
+    <div key={section.id ?? index} className="mb-2">
+      {section.title && (
+        <h3 className="text-3xl font-bold mt-12 mb-6 text-gray-900 tracking-tight">{section.title}</h3>
+      )}
+      {section.imageUrl && (
+        <div className="my-12 rounded-2xl overflow-hidden aspect-[21/9] relative shadow-lg">
+          <img
+            src={section.imageUrl}
+            alt={section.imageAlt || section.title || ""}
+            className="object-cover w-full h-full hover:scale-105 transition-transform duration-700"
+          />
         </div>
-
-        <h3 class="text-3xl font-bold mt-12 mb-6 text-gray-900 tracking-tight">The Vertical OS Intervention</h3>
-        <p class="mb-6 text-lg text-gray-700 leading-relaxed">
-          We deployed an integrated layer of Guardian and Maestro to create a "Digital Compliance Armor."
-        </p>
-        <div class="space-y-6 mb-10">
-          <div class="bg-gray-50 p-6 rounded-2xl border border-gray-100 shadow-sm">
-            <h4 class="text-xl font-bold text-gray-900 mb-2">The <500ms Challenge</h4>
-            <p class="text-lg text-gray-700 leading-relaxed">
-              Using VeloxCore, we achieved sub-500ms latency for live audio ingestion, allowing the AI to "listen" and "understand" faster than the human agent could speak.
-            </p>
-          </div>
-          <div class="bg-gray-50 p-6 rounded-2xl border border-gray-100 shadow-sm">
-            <h4 class="text-xl font-bold text-gray-900 mb-2">Policy-as-Code</h4>
-            <p class="text-lg text-gray-700 leading-relaxed">
-              We converted 500+ pages of RBI guidelines and internal scripts into executable logic.
-            </p>
-          </div>
-          <div class="bg-gray-50 p-6 rounded-2xl border border-gray-100 shadow-sm">
-            <h4 class="text-xl font-bold text-gray-900 mb-2">Real-Time Nudges</h4>
-            <p class="text-lg text-gray-700 leading-relaxed">
-              Maestro triggered instant visual nudges correcting agent behavior before the call ended.
-            </p>
-          </div>
-        </div>
-
-        <h3 class="text-3xl font-bold mt-12 mb-6 text-gray-900 tracking-tight">The Impact</h3>
-        <p class="mb-6 text-lg text-gray-700 leading-relaxed">
-          Operational Alpha: QA teams shifted from "listening for errors" to "strategic coaching," increasing their internal efficiency by 10x. Turned a 2% sampling gamble into 100% real-time compliance infrastructure.
-        </p>
-      `
-    };
-  }
-
-  if (slug === 'customer-experience-os') {
-    return {
-      title: "Scaling Empathy for a 10M+ Telecom Giant",
-      client: "Tier-1 Provider",
-      industry: "Telecom",
-      banner: "https://images.unsplash.com/photo-1544197150-b99a580bb7a8?q=80&w=2400",
-      metrics: [
-        { label: "Lower Cost", value: "65%" },
-        { label: "Wait Time", value: "0 mins" },
-        { label: "CSAT Improvement", value: "45%" }
-      ],
-      content: `
-        <p class="text-xl  text-gray-800 mb-10 border-l-4 border-primary pl-6 py-2">
-          "Partnering with The Vertical AI allowed us to completely reimagine our customer experience. We achieved scalability we didn't think was possible without heavily compromising on quality."
-        </p>
-        
-        <h3 class="text-3xl font-bold mt-12 mb-6 text-gray-900">The Context</h3>
-        <p class="mb-8 text-lg text-gray-700 leading-relaxed">
-          Our client, a sprawling Tier-1 Telecom Provider, was facing skyrocketing support costs and overwhelmed human agents. Due to a recent aggressive market expansion, they experienced a permanent <strong class="text-gray-900">300% surge in support volume</strong>. Wait times had stretched to over 45 minutes, leading to massive friction, brand damage, and rapidly dropping CSAT scores.
-        </p>
-        
-        <div class="my-12 rounded-2xl overflow-hidden aspect-[21/9] relative shadow-lg">
-          <img src="https://images.unsplash.com/photo-1497215728101-856f4ea42174?q=80&w=1600" alt="Enterprise office" class="object-cover w-full h-full hover:scale-105 transition-transform duration-700" />
-        </div>
-
-        <h3 class="text-3xl font-bold mt-12 mb-6 text-gray-900 tracking-tight">The Solution</h3>
-        <p class="mb-6 text-lg text-gray-700 leading-relaxed">
-         The Vertical AI deployed a comprehensive suite of orchestration agents, replacing 7 fragmented legacy silos with a unified Multilingual Decision Engine integrated securely into their CRM and existing SIP trunks. 
-        </p>
-        <p class="mb-8 text-lg text-gray-700 leading-relaxed">
-          The agents were configured precisely to handle complex tier-1 and tier-2 troubleshooting completely autonomously. Using state-of-the-art human-like voice synthesis with under 500ms latency and advanced intent tracking, the agents provided a fluid, conversational experience that felt entirely native.
-        </p>
-
-        <h3 class="text-3xl font-bold mt-12 mb-6 text-gray-900 tracking-tight">The Results</h3>
-        <p class="mb-6 text-lg text-gray-700 leading-relaxed">
-          Within 14 days of going live, the AI layer absorbed and flawlessly handled over 80% of total inbound volume with a consistent zero-minute wait time-24/7.
-        </p>
-        <p class="mb-6 text-lg text-gray-700 leading-relaxed">
-          Human agents were no longer burnt out by generic status queries. Instead, they were elevated to handle only high-touch compliance tasks, leading to a profound transformation in company morale and a 65% lower operational cost.
-        </p>
-      `
-    };
-  }
-
-  return {
-    title: "The Precision Recovery Engine: High-Velocity Financial Recovery",
-    client: "SME & Micro-lender",
-    industry: "Finance",
-    banner: "https://images.unsplash.com/photo-1554224155-8d04cb21cd6c?q=80&w=2400",
-    metrics: [
-      { label: "Recovery Lift", value: "45%" },
-      { label: "Agent Efficiency", value: "3x" },
-      { label: "Compliance Score", value: "100%" }
-    ],
-    content: `
-      <p class="text-xl  text-gray-800 mb-10 border-l-4 border-primary pl-6 py-2">
-        "We completely shifted the dynamic of collections. Instead of aggressively chasing payments, we deployed an intelligent engine that negotiated with empathy and hard data."
-      </p>
-      
-      <h3 class="text-3xl font-bold mt-12 mb-6 text-gray-900">The Context</h3>
-      <p class="mb-8 text-lg text-gray-700 leading-relaxed">
-        A fast-growing SME & Micro-lender was struggling with high delinquency rates. Their manual collections team was overwhelmed by the sheer volume of micro-loans, resulting in missed recovery windows and escalating non-performing assets (NPAs).
-      </p>
-      
-      <div class="my-12 rounded-2xl overflow-hidden aspect-[21/9] relative shadow-lg">
-        <img src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?q=80&w=1600" alt="Financial charts" class="object-cover w-full h-full hover:scale-105 transition-transform duration-700" />
-      </div>
-
-      <h3 class="text-3xl font-bold mt-12 mb-6 text-gray-900 tracking-tight">The Structural Failure</h3>
-      <p class="mb-8 text-lg text-gray-700 leading-relaxed">
-        Traditional debt collection relies heavily on aggressive, volume-based dialer campaigns. This approach not only damages the brand's reputation but is highly ineffective for borrowers facing genuine short-term liquidity issues who require restructuring rather than harassment.
-      </p>
-
-      <h3 class="text-3xl font-bold mt-12 mb-6 text-gray-900 tracking-tight">The Precision Recovery Engine</h3>
-      <p class="mb-6 text-lg text-gray-700 leading-relaxed">
-        We engineered a high-velocity recovery engine grounded in dignity and persona-based data. Utilizing The Vertical AI's intelligence layer, the system analyzed past payment behavior, borrower profiles, and macroeconomic data to predict the optimal time and channel for outreach.
-      </p>
-      <div class="space-y-6 mb-10">
-        <div class="bg-gray-50 p-6 rounded-2xl border border-gray-100 shadow-sm">
-          <h4 class="text-xl font-bold text-gray-900 mb-2">Persona-Driven Outreach</h4>
-          <p class="text-lg text-gray-700 leading-relaxed">
-            The AI automatically categorized borrowers into intent-based personas, dynamically adjusting the tone of voice and negotiation scripts (e.g., offering payment plans to "willing but unable" borrowers).
-          </p>
-        </div>
-        <div class="bg-gray-50 p-6 rounded-2xl border border-gray-100 shadow-sm">
-          <h4 class="text-xl font-bold text-gray-900 mb-2">Multi-lingual Empathy</h4>
-          <p class="text-lg text-gray-700 leading-relaxed">
-            Engaged borrowers natively in 10+ regional languages, building instant trust and massively reducing friction during stressful financial conversations.
-          </p>
-        </div>
-      </div>
-
-      <h3 class="text-3xl font-bold mt-12 mb-6 text-gray-900 tracking-tight">The Results</h3>
-      <p class="mb-6 text-lg text-gray-700 leading-relaxed">
-        The precision engine drove a massive <strong class="text-gray-900">45% lift in overall recovery rates</strong> within the first 60 days. Moreover, by strictly adhering to RBI guidelines through Policy-as-Code, the lender achieved 100% compliance, entirely eliminating regulatory penalty risks associated with third-party debt collection.
-      </p>
-    `
-  }
-};
+      )}
+      {section.quote && (
+        <blockquote className="border-l-4 border-primary pl-6 my-6 italic text-gray-600 text-lg">
+          {section.quote}
+        </blockquote>
+      )}
+      {section.content && (
+        <p className="mb-8 text-lg text-gray-700 leading-relaxed">{section.content}</p>
+      )}
+    </div>
+  );
+}
 
 function CaseStudyDetailContent() {
   const searchParams = useSearchParams();
   const slug = searchParams.get('slug');
   const [data, setData] = useState<any>(null);
+  const [notFound, setNotFound] = useState(false);
 
   useEffect(() => {
-    if (slug) {
-      setTimeout(() => {
-        setData(getCaseStudyDetail(slug));
-      }, 500);
-    }
+    if (!slug) return;
+    fetch(`/api/case-studies?slug=${encodeURIComponent(slug)}`)
+      .then((res) => res.json())
+      .then((json) => {
+        if (json.success && json.data?.length > 0) {
+          const cs = json.data[0];
+          setData({
+            title: cs.storyTitle,
+            client: cs.breadcrumbTitle,
+            industry: cs.categoryBadge,
+            banner: cs.headerImageUrl,
+            mainHeading: cs.mainHeading,
+            testimonialQuote: cs.testimonialQuote,
+            metrics: cs.keyResults || [],
+            implementationSteps: cs.implementationSteps || [],
+            sections: cs.sections || [],
+          });
+        } else {
+          setNotFound(true);
+        }
+      })
+      .catch(() => setNotFound(true));
   }, [slug]);
 
   if (!slug) return <div className="py-32 text-center text-xl text-gray-600">No case study specified.</div>;
+  if (notFound) return <div className="py-32 text-center text-xl text-gray-600">Case study not found.</div>;
   if (!data) return <div className="py-32 text-center text-xl text-gray-600">Loading case study details...</div>;
 
   return (
@@ -214,12 +105,16 @@ function CaseStudyDetailContent() {
             {data.industry}
           </div>
           <h2 className="text-2xl md:text-4xl font-bold text-gray-900 mb-6 md:mb-8">
-            How {data.client} Optimized Operations
+            {data.mainHeading || `How ${data.client} Optimized Operations`}
           </h2>
-          <article
-            className="prose prose-base md:prose-lg max-w-none prose-p:text-gray-600 prose-headings:text-gray-900"
-            dangerouslySetInnerHTML={{ __html: data.content }}
-          />
+          <article className="prose prose-base md:prose-lg max-w-none prose-p:text-gray-600 prose-headings:text-gray-900">
+            {data.testimonialQuote && (
+              <p className="text-xl text-gray-800 mb-10 border-l-4 border-primary pl-6 py-2">
+                &quot;{data.testimonialQuote}&quot;
+              </p>
+            )}
+            {data.sections.map((section: CaseStudySection, index: number) => renderSection(section, index))}
+          </article>
         </div>
 
         {/* Right Sidebar */}
@@ -249,18 +144,12 @@ function CaseStudyDetailContent() {
               <Activity className="text-primary" /> Implementation
             </h4>
             <ul className="space-y-4">
-              <li className="flex items-start gap-3 text-gray-700">
-                <CheckCircle2 className="text-primary mt-0.5 shrink-0" size={20} />
-                <span>Seamless CRM Integration</span>
-              </li>
-              <li className="flex items-start gap-3 text-gray-700">
-                <CheckCircle2 className="text-primary mt-0.5 shrink-0" size={20} />
-                <span>Custom Voice Cloning</span>
-              </li>
-              <li className="flex items-start gap-3 text-gray-700">
-                <CheckCircle2 className="text-primary mt-0.5 shrink-0" size={20} />
-                <span>14-day Deployment cycle</span>
-              </li>
+              {data.implementationSteps.map((step: string, i: number) => (
+                <li key={i} className="flex items-start gap-3 text-gray-700">
+                  <CheckCircle2 className="text-primary mt-0.5 shrink-0" size={20} />
+                  <span>{step}</span>
+                </li>
+              ))}
             </ul>
           </div>
         </div>
