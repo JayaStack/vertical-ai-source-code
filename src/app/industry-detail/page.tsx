@@ -243,12 +243,59 @@ export default function IndustryPage() {
             try {
                 const slug = searchParams.get('slug') || 'bfsi';
 
-                const response = await fetch(`https://theverticalai.top/App/api.php?gofor=industrydetail&slug=${slug}`);
-                const data = await response.json();
+                const response = await fetch(`/api/industries?slug=${encodeURIComponent(slug)}`);
+                const json = await response.json();
+                const row = json?.success ? json.data?.[0] : null;
 
-                if (data && data.full_content) {
-                    const parsed = JSON.parse(data.full_content);
-                    setPageData({ ...parsed, industry_name: data.industry_name });
+                if (row) {
+                    setPageData({
+                        industry_name: row.name,
+                        hero: {
+                            title: row.heroTitle,
+                            titleHighlight: row.heroTitleHighlight,
+                            description: row.heroDescription,
+                            descriptionHighlight: row.heroDescriptionHighlight,
+                            image: row.heroImageUrl,
+                        },
+                        trustedLogos: row.trustedLogos || [],
+                        otherFeatures: {
+                            title: row.featuresTitle,
+                            titleHighlight: row.featuresTitleHighlight,
+                            description: row.featuresDescription,
+                            features: row.featureCards || [],
+                        },
+                        transformationFunnel: {
+                            items: row.transformationLegacy || [],
+                            outcomes: row.transformationOutcomes || [],
+                        },
+                        caseStudy: row.caseStudy || {},
+                        verticalProduct: {
+                            title: row.pillarsTitle,
+                            titleHighlight: row.pillarsTitleHighlight,
+                            subtitle: row.pillarsSubtitle,
+                            pillars: row.productPillars || [],
+                        },
+                        agentMapping: {
+                            title: row.agentsTitle,
+                            titleHighlight: row.agentsTitleHighlight,
+                            agents: row.agentCards || [],
+                        },
+                        compliance: {
+                            title: row.complianceTitle,
+                            titleHighlight: row.complianceTitleHighlight,
+                            items: row.complianceCards || [],
+                        },
+                        useCases: row.useCases || [],
+                        metrics: {
+                            title: row.metricsTitle,
+                            titleHighlight: row.metricsTitleHighlight,
+                            items: row.metrics || [],
+                        },
+                        finalCta: {
+                            title: row.ctaTitle,
+                            titleHighlight: row.ctaTitleHighlight,
+                        },
+                    });
                 }
             } catch (error) {
                 console.error("Failed to fetch industry data:", error);

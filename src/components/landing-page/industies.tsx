@@ -2,21 +2,8 @@
 
 import React, { useEffect, useRef, useState } from "react";
 import Image from "next/image";
-import type { StaticImageData } from "next/image";
 import { motion, AnimatePresence, useInView } from "framer-motion";
 import { useRouter } from "next/navigation";
-
-import Automotive from "@/assets/Landing-page/industries/automotive.webp";
-import BPO from "@/assets/Landing-page/industries/bpo.webp";
-import EduTech from "@/assets/Landing-page/industries/edu-tech.webp";
-import HR from "@/assets/Landing-page/industries/hr.webp";
-import MicroFinance from "@/assets/Landing-page/industries/micro-finanace.webp";
-import Travel from "@/assets/Landing-page/industries/travel.webp";
-import BFSI from "@/assets/Landing-page/industries/bfsi.webp";
-import Healthcare from "@/assets/Landing-page/industries/healthcare.webp";
-import Telecom from "@/assets/Landing-page/industries/telecom.webp";
-import Ecom from "@/assets/Landing-page/industries/e-commerce.webp";
-import RealEstate from "@/assets/Landing-page/industries/real-estate.webp";
 
 // ─── Types ───────────────────────────────────────────────────────────────────
 interface TechItem {
@@ -25,35 +12,8 @@ interface TechItem {
     counter: string;
     description: string;
     url: string;
+    image: string;
 }
-
-const techItems: TechItem[] = [
-    { id: 1, label: "BFSI", counter: "01", description: "AI for financial operations", url: "/industry-detail?slug=bfsi" },
-    { id: 2, label: "Healthcare", counter: "02", description: "AI for patient engagement", url: "/industry-detail?slug=healthcare" },
-    { id: 3, label: "Telecom", counter: "03", description: "AI for telecom operations", url: "/industry-detail?slug=telecom" },
-    { id: 4, label: "E-commerce", counter: "04", description: "AI for customer commerce", url: "/industry-detail?slug=ecommerce" },
-    { id: 5, label: "Real Estate", counter: "05", description: "AI for property engagement", url: "/industry-detail?slug=realestate" },
-    { id: 6, label: "Automotive", counter: "06", description: "AI for dealership operations", url: "/industry-detail?slug=automotive" },
-    { id: 7, label: "EdTech", counter: "07", description: "AI for learning experiences", url: "/industry-detail?slug=edtech" },
-    { id: 8, label: "BPO", counter: "08", description: "AI for process automation", url: "/industry-detail?slug=bpo" },
-    { id: 9, label: "Microfinance", counter: "09", description: "AI for lending operations", url: "/industry-detail?slug=microfinance" },
-    { id: 10, label: "Travel & Hospitality", counter: "10", description: "AI for guest experiences", url: "/industry-detail?slug=travel" },
-    { id: 11, label: "Recruitment & HR", counter: "11", description: "AI for workforce management", url: "/industry-detail?slug=hr-services" },
-];
-
-const techImages: Record<number, StaticImageData> = {
-    1: BFSI,
-    2: Healthcare,
-    3: Telecom,
-    4: Ecom,
-    5: RealEstate,
-    6: Automotive,
-    7: EduTech,
-    8: BPO,
-    9: MicroFinance,
-    10: Travel,
-    11: HR,
-};
 
 
 // ─── TECH STACK LIST SECTION ─────────────────────────────────────────────────
@@ -117,7 +77,27 @@ function TechHeadingsSection() {
     const sectionRef = useRef<HTMLElement>(null);
     const isInView = useInView(sectionRef, { once: true, margin: "-8%" });
     const [hoveredId, setHoveredId] = useState<number | null>(null);
+    const [techItems, setTechItems] = useState<TechItem[]>([]);
     const router = useRouter();
+
+    useEffect(() => {
+        fetch("/api/industries")
+            .then((res) => res.json())
+            .then((json) => {
+                if (json.success) {
+                    const mapped: TechItem[] = json.data.map((row: any, i: number) => ({
+                        id: i + 1,
+                        label: row.name,
+                        counter: String(i + 1).padStart(2, "0"),
+                        description: row.heroDescription,
+                        url: `/industry-detail?slug=${row.slug}`,
+                        image: row.heroImageUrl,
+                    }));
+                    setTechItems(mapped);
+                }
+            })
+            .catch(console.error);
+    }, []);
 
     const handleLabelClick = (item: TechItem) => {
         router.push(item.url);
@@ -154,8 +134,7 @@ function TechHeadingsSection() {
                             key={item.id}
                             onMouseEnter={() => setHoveredId(item.id)}
                             onMouseLeave={() => setHoveredId(null)}
-                            className={`relative flex items-center justify-center h-14 sm:h-16 md:h-20 2xl:h-24 ${idx === 10 ? "w-full lg:w-1/3" : "w-1/2 md:w-1/2 lg:w-1/3"
-                                }`}
+                            className="relative flex items-center justify-center h-14 sm:h-16 md:h-20 2xl:h-24 w-1/2 md:w-1/2 lg:w-1/3"
                         >
                             {/* Hover Card Overlay (centered over the title) */}
                             <AnimatePresence>
@@ -170,7 +149,7 @@ function TechHeadingsSection() {
                                         <div className="w-56 h-38 md:w-72 md:h-48 2xl:w-80 2xl:h-52 relative overflow-hidden rounded-2xl shadow-[0_20px_50px_rgba(0,0,0,0.15)] border-4 border-white/90 bg-[#1b3d6c] cursor-pointer">
                                             {/* Background Image */}
                                             <Image
-                                                src={techImages[item.id]}
+                                                src={item.image}
                                                 alt={item.label}
                                                 fill
                                                 priority
@@ -184,7 +163,7 @@ function TechHeadingsSection() {
                                                         {item.label}
                                                     </h4>
 
-                                                    <p className="text-[11px] md:text-sm 2xl:text-base text-white/95 font-medium leading-relaxed max-w-[90%] md:max-w-none">
+                                                    <p className="text-[11px] md:text-sm 2xl:text-base text-white/95 font-medium leading-relaxed max-w-[90%] md:max-w-none line-clamp-3">
                                                         {item.description}
                                                     </p>
                                                 </div>

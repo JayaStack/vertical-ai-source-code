@@ -122,3 +122,41 @@ model Testimonial {
   createdAt   DateTime @default(now())
   updatedAt   DateTime
 }
+
+model Industry {
+  id                       String   @id
+  slug                     String   @unique
+  name                     String
+  status                   String   @default("published")
+  heroTitle                String   @default("")
+  heroTitleHighlight       String   @default("")
+  heroDescription          String   @default("")
+  heroDescriptionHighlight String   @default("")
+  heroImageUrl             String   @default("")
+  trustedLogos             String[]
+  ctaTitle                 String   @default("")
+  ctaTitleHighlight        String   @default("")
+  featuresTitle            String   @default("")
+  featuresTitleHighlight   String   @default("")
+  featuresDescription      String   @default("")
+  featureCards             Json     @default("[]")
+  transformationLegacy     String[]
+  transformationOutcomes   String[]
+  pillarsTitle             String   @default("")
+  pillarsTitleHighlight    String   @default("")
+  pillarsSubtitle          String   @default("")
+  productPillars           Json     @default("[]")
+  caseStudy                Json     @default("{}")
+  metricsTitle             String   @default("")
+  metricsTitleHighlight    String   @default("")
+  metrics                  Json     @default("[]")
+  agentsTitle              String   @default("")
+  agentsTitleHighlight     String   @default("")
+  agentCards               Json     @default("[]")
+  complianceTitle          String   @default("")
+  complianceTitleHighlight String   @default("")
+  complianceCards          Json     @default("[]")
+  useCases                 Json     @default("[]")
+  createdAt                DateTime @default(now())
+  updatedAt                DateTime
+}
