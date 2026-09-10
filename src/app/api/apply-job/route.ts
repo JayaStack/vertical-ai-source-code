@@ -1,5 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import nodemailer from "nodemailer";
+import prisma from "@/lib/prisma";
+import { v4 as uuidv4 } from "uuid";
 
 const RECIPIENT_EMAIL = process.env.SMTP_EMAIL || "harishraghavender2@gmail.com";
 const SMTP_USER = process.env.SMTP_EMAIL || "harishraghavender2@gmail.com";
@@ -43,6 +45,27 @@ export async function POST(request: NextRequest) {
       resumeBuffer = Buffer.from(bytes);
       resumeFilename = resumeFile.name;
     }
+
+    // 1b. Persist the application details (excluding the resume file) to the database
+    await prisma.jobApplication.create({
+      data: {
+        id: uuidv4(),
+        jobTitle,
+        jobCategory,
+        jobLocation,
+        fullName,
+        email,
+        phone,
+        linkedin,
+        currentLocation,
+        totalExperience,
+        noticePeriod,
+        expectedCtc,
+        source,
+        coverLetter,
+        status: "new",
+      },
+    });
 
     // 2. Prepare HTML Email Content
     const htmlContent = `
