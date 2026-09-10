@@ -124,8 +124,10 @@ export default function JobDetailClient() {
   const slug = params?.slug as string;
 
   const [job, setJob] = useState<any>(null);
+  const [isLoadingJob, setIsLoadingJob] = useState(true);
 
   useEffect(() => {
+    setIsLoadingJob(true);
     fetch("/api/careers")
       .then((res) => res.json())
       .then((json) => {
@@ -134,7 +136,8 @@ export default function JobDetailClient() {
           setJob(found || null);
         }
       })
-      .catch(() => setJob(null));
+      .catch(() => setJob(null))
+      .finally(() => setIsLoadingJob(false));
   }, [slug]);
 
   // Dialog state
@@ -163,8 +166,16 @@ export default function JobDetailClient() {
 
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  if (!job) {
+  if (!isLoadingJob && !job) {
     notFound();
+  }
+
+  if (isLoadingJob || !job) {
+    return (
+      <div className="min-h-screen bg-white flex items-center justify-center text-gray-500">
+        Loading...
+      </div>
+    );
   }
 
   // Handle file validation and setting
