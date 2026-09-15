@@ -1,13 +1,13 @@
 import { NextRequest, NextResponse } from "next/server";
 import { verifyAuth } from "../../auth";
 import prisma from "@/lib/prisma";
+import { fetchCmsResource } from "@/lib/cms-api";
 
-// GET /api/why-framework/[id] - Get single pillar by id or slug
+// GET /api/why-framework/[id] - Get single pillar by id or slug (via the admin CMS public API)
 export async function GET(_: NextRequest, { params }: { params: { id: string } }) {
   try {
-    const pillar = await prisma.whyFramework.findFirst({
-      where: { OR: [{ id: params.id }, { slug: params.id }] },
-    });
+    const pillars = await fetchCmsResource("/api/public/why-framework", "frameworks");
+    const pillar = pillars.find((p: any) => p.id === params.id || p.slug === params.id);
     if (!pillar) {
       return NextResponse.json({ success: false, error: "Pillar not found" }, { status: 404 });
     }

@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { verifyAuth } from "../auth";
 import prisma from "@/lib/prisma";
 import { v4 as uuidv4 } from "uuid";
+import { fetchCmsResource } from "@/lib/cms-api";
 
 function slugify(text: string): string {
   return text
@@ -10,19 +11,15 @@ function slugify(text: string): string {
     .replace(/(^-|-$)/g, "");
 }
 
-// GET /api/industries - List published industries (optional ?slug= filter)
+// GET /api/industries - List published industries (optional ?slug= filter, via the admin CMS public API)
 export async function GET(request: NextRequest) {
   try {
     const { searchParams } = new URL(request.url);
     const slug = searchParams.get("slug");
 
-    const industries = await prisma.industry.findMany({
-      where: {
-        status: "published",
-        ...(slug ? { slug } : {}),
-      },
-      orderBy: { createdAt: "asc" },
-    });
+    let industries = await fetchCmsResource("/api/public/industries", "industries");
+    industries = industries.filter((i: any) => i.status === "published");
+    if (slug) industries = industries.filter((i: any) => i.slug === slug);
 
     return NextResponse.json({ success: true, data: industries });
   } catch (error: any) {

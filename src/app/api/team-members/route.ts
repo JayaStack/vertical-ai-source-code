@@ -2,14 +2,15 @@ import { NextRequest, NextResponse } from "next/server";
 import { verifyAuth } from "../auth";
 import prisma from "@/lib/prisma";
 import { v4 as uuidv4 } from "uuid";
+import { fetchCmsResource } from "@/lib/cms-api";
 
-// GET /api/team-members - List published team members, ordered for display
+// GET /api/team-members - List published team members, ordered for display (via the admin CMS public API)
 export async function GET() {
   try {
-    const teamMembers = await prisma.teamMember.findMany({
-      where: { status: "published" },
-      orderBy: { sortOrder: "asc" },
-    });
+    let teamMembers = await fetchCmsResource("/api/public/team", "members");
+    teamMembers = teamMembers
+      .filter((m: any) => m.status === "published")
+      .sort((a: any, b: any) => (a.sortOrder ?? 0) - (b.sortOrder ?? 0));
     return NextResponse.json({ success: true, data: teamMembers });
   } catch (error: any) {
     return NextResponse.json(

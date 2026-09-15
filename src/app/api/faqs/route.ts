@@ -1,18 +1,16 @@
 import { NextRequest, NextResponse } from "next/server";
 import prisma from "@/lib/prisma";
+import { fetchCmsResource } from "@/lib/cms-api";
 
+// GET /api/faqs - List published FAQs (optional ?scopeKey= filter, via the admin CMS public API)
 export async function GET(request: NextRequest) {
   try {
     const { searchParams } = new URL(request.url);
     const scopeKey = searchParams.get("scopeKey");
 
-    const faqs = await prisma.faq.findMany({
-      where: {
-        status: "published",
-        ...(scopeKey ? { scopeKey } : {}),
-      },
-      orderBy: { createdAt: "asc" },
-    });
+    let faqs = await fetchCmsResource("/api/public/faqs", "faqs");
+    faqs = faqs.filter((f: any) => f.status === "published");
+    if (scopeKey) faqs = faqs.filter((f: any) => f.scopeKey === scopeKey);
 
     return NextResponse.json({ success: true, data: faqs });
   } catch (error: any) {

@@ -1,13 +1,13 @@
 import { NextRequest, NextResponse } from "next/server";
 import { verifyAuth } from "../../auth";
 import prisma from "@/lib/prisma";
+import { fetchCmsResource } from "@/lib/cms-api";
 
-// GET /api/platforms/[id] - Get single platform by id or slug
+// GET /api/platforms/[id] - Get single platform by id or slug (via the admin CMS public API)
 export async function GET(_: NextRequest, { params }: { params: { id: string } }) {
   try {
-    const platform = await prisma.platformOs.findFirst({
-      where: { OR: [{ id: params.id }, { slug: params.id }] },
-    });
+    const platforms = await fetchCmsResource("/api/public/platform-os", "platforms");
+    const platform = platforms.find((p: any) => p.id === params.id || p.slug === params.id);
     if (!platform) {
       return NextResponse.json({ success: false, error: "Platform not found" }, { status: 404 });
     }

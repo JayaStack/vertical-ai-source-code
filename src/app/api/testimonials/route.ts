@@ -1,12 +1,12 @@
 import { NextResponse } from "next/server";
 import prisma from "@/lib/prisma";
+import { fetchCmsResource } from "@/lib/cms-api";
 
+// GET /api/testimonials - List published testimonials (via the admin CMS public API)
 export async function GET() {
   try {
-    const testimonials = await prisma.testimonial.findMany({
-      where: { status: "published" },
-      orderBy: { createdAt: "asc" },
-    });
+    let testimonials = await fetchCmsResource("/api/public/testimonials", "testimonials");
+    testimonials = testimonials.filter((t: any) => t.status === "published");
     return NextResponse.json({ success: true, data: testimonials });
   } catch (error: any) {
     return NextResponse.json(

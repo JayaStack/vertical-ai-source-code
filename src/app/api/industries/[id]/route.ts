@@ -1,13 +1,13 @@
 import { NextRequest, NextResponse } from "next/server";
 import { verifyAuth } from "../../auth";
 import prisma from "@/lib/prisma";
+import { fetchCmsResource } from "@/lib/cms-api";
 
-// GET /api/industries/[id] - Get single industry by id or slug
+// GET /api/industries/[id] - Get single industry by id or slug (via the admin CMS public API)
 export async function GET(_: NextRequest, { params }: { params: { id: string } }) {
   try {
-    const industry = await prisma.industry.findFirst({
-      where: { OR: [{ id: params.id }, { slug: params.id }] },
-    });
+    const industries = await fetchCmsResource("/api/public/industries", "industries");
+    const industry = industries.find((i: any) => i.id === params.id || i.slug === params.id);
     if (!industry) {
       return NextResponse.json({ success: false, error: "Industry not found" }, { status: 404 });
     }

@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { verifyAuth } from "../auth";
 import prisma from "@/lib/prisma";
 import { v4 as uuidv4 } from "uuid";
+import { fetchCmsResource } from "@/lib/cms-api";
 
 function slugify(text: string): string {
   return text
@@ -10,12 +11,10 @@ function slugify(text: string): string {
     .replace(/(^-|-$)/g, "");
 }
 
-// GET /api/careers - List all careers
+// GET /api/careers - List all published careers (via the admin CMS public API)
 export async function GET() {
   try {
-    const careers = await prisma.jobListing.findMany({
-      orderBy: { createdAt: "desc" },
-    });
+    const careers = await fetchCmsResource("/api/public/careers", "jobs");
     return NextResponse.json({ success: true, data: careers });
   } catch (error: any) {
     return NextResponse.json(

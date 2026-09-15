@@ -1,13 +1,13 @@
 import { NextRequest, NextResponse } from "next/server";
 import { verifyAuth } from "../../auth";
 import prisma from "@/lib/prisma";
+import { fetchCmsResource } from "@/lib/cms-api";
 
-// GET /api/case-studies/[id] - Get single case study by id or slug
+// GET /api/case-studies/[id] - Get single case study by id or slug (via the admin CMS public API)
 export async function GET(_: NextRequest, { params }: { params: { id: string } }) {
   try {
-    const caseStudy = await prisma.caseStudy.findFirst({
-      where: { OR: [{ id: params.id }, { slug: params.id }] },
-    });
+    const caseStudies = await fetchCmsResource("/api/public/case-studies", "caseStudies");
+    const caseStudy = caseStudies.find((c: any) => c.id === params.id || c.slug === params.id);
     if (!caseStudy) {
       return NextResponse.json({ success: false, error: "Case study not found" }, { status: 404 });
     }

@@ -1,12 +1,11 @@
 import Header from "@/components/landing-page/header";
 import LandingPageFooter from "@/components/landing-page/landing-page-footer";
 import PageHero from "@/components/landing-page/page-hero";
-import prisma from "@/lib/prisma";
+import { fetchCmsResource } from "@/lib/cms-api";
 
 export default async function SecurityPolicy() {
-  const doc = await prisma.legalDocument.findFirst({
-    where: { slug: "security", status: "published" },
-  });
+  const documents = await fetchCmsResource("/api/public/legal", "documents");
+  const doc = documents.find((d: any) => d.slug === "security" && d.status === "published");
 
   const title = doc?.title || "Security Policy";
   const lastUpdated = doc?.lastUpdated

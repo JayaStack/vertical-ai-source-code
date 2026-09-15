@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { verifyAuth } from "../auth";
 import prisma from "@/lib/prisma";
 import { v4 as uuidv4 } from "uuid";
+import { fetchCmsResource } from "@/lib/cms-api";
 
 function slugify(text: string): string {
   return text
@@ -10,12 +11,10 @@ function slugify(text: string): string {
     .replace(/(^-|-$)/g, "");
 }
 
-// GET /api/blogs - List all published blogs
+// GET /api/blogs - List all published blogs (via the admin CMS public API)
 export async function GET() {
   try {
-    const blogs = await prisma.blogPost.findMany({
-      orderBy: { createdAt: "desc" },
-    });
+    const blogs = await fetchCmsResource("/api/public/blogs", "blogs");
     return NextResponse.json({ success: true, data: blogs });
   } catch (error: any) {
     return NextResponse.json(

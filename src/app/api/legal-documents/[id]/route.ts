@@ -1,13 +1,13 @@
 import { NextRequest, NextResponse } from "next/server";
 import { verifyAuth } from "../../auth";
 import prisma from "@/lib/prisma";
+import { fetchCmsResource } from "@/lib/cms-api";
 
-// GET /api/legal-documents/[id] - Get single legal document by id or slug
+// GET /api/legal-documents/[id] - Get single legal document by id or slug (via the admin CMS public API)
 export async function GET(_: NextRequest, { params }: { params: { id: string } }) {
   try {
-    const document = await prisma.legalDocument.findFirst({
-      where: { OR: [{ id: params.id }, { slug: params.id }] },
-    });
+    const documents = await fetchCmsResource("/api/public/legal", "documents");
+    const document = documents.find((d: any) => d.id === params.id || d.slug === params.id);
     if (!document) {
       return NextResponse.json({ success: false, error: "Legal document not found" }, { status: 404 });
     }

@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { verifyAuth } from "../auth";
 import prisma from "@/lib/prisma";
 import { v4 as uuidv4 } from "uuid";
+import { fetchCmsResource } from "@/lib/cms-api";
 
 function slugify(text: string): string {
   return text
@@ -10,19 +11,15 @@ function slugify(text: string): string {
     .replace(/(^-|-$)/g, "");
 }
 
-// GET /api/case-studies - List published case studies (optional ?slug= filter)
+// GET /api/case-studies - List published case studies (optional ?slug= filter, via the admin CMS public API)
 export async function GET(request: NextRequest) {
   try {
     const { searchParams } = new URL(request.url);
     const slug = searchParams.get("slug");
 
-    const caseStudies = await prisma.caseStudy.findMany({
-      where: {
-        status: "published",
-        ...(slug ? { slug } : {}),
-      },
-      orderBy: { createdAt: "desc" },
-    });
+    let caseStudies = await fetchCmsResource("/api/public/case-studies", "caseStudies");
+    caseStudies = caseStudies.filter((c: any) => c.status === "published");
+    if (slug) caseStudies = caseStudies.filter((c: any) => c.slug === slug);
 
     return NextResponse.json({ success: true, data: caseStudies });
   } catch (error: any) {

@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { verifyAuth } from "../auth";
 import prisma from "@/lib/prisma";
 import { v4 as uuidv4 } from "uuid";
+import { fetchCmsResource } from "@/lib/cms-api";
 
 function slugify(text: string): string {
   return text
@@ -10,19 +11,15 @@ function slugify(text: string): string {
     .replace(/(^-|-$)/g, "");
 }
 
-// GET /api/platforms - List published platforms (optional ?slug= filter)
+// GET /api/platforms - List published platforms (optional ?slug= filter, via the admin CMS public API)
 export async function GET(request: NextRequest) {
   try {
     const { searchParams } = new URL(request.url);
     const slug = searchParams.get("slug");
 
-    const platforms = await prisma.platformOs.findMany({
-      where: {
-        status: "published",
-        ...(slug ? { slug } : {}),
-      },
-      orderBy: { createdAt: "asc" },
-    });
+    let platforms = await fetchCmsResource("/api/public/platform-os", "platforms");
+    platforms = platforms.filter((p: any) => p.status === "published");
+    if (slug) platforms = platforms.filter((p: any) => p.slug === slug);
 
     return NextResponse.json({ success: true, data: platforms });
   } catch (error: any) {

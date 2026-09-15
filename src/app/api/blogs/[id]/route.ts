@@ -1,13 +1,13 @@
 import { NextRequest, NextResponse } from "next/server";
 import { verifyAuth } from "../../auth";
 import prisma from "@/lib/prisma";
+import { fetchCmsResource } from "@/lib/cms-api";
 
-// GET /api/blogs/[id] - Get single blog
+// GET /api/blogs/[id] - Get single blog (via the admin CMS public API)
 export async function GET(_: NextRequest, { params }: { params: { id: string } }) {
   try {
-    const blog = await prisma.blogPost.findFirst({
-      where: { OR: [{ id: params.id }, { slug: params.id }] },
-    });
+    const blogs = await fetchCmsResource("/api/public/blogs", "blogs");
+    const blog = blogs.find((b: any) => b.id === params.id || b.slug === params.id);
     if (!blog) return NextResponse.json({ success: false, error: "Blog not found" }, { status: 404 });
     return NextResponse.json({ success: true, data: blog });
   } catch (error: any) {
