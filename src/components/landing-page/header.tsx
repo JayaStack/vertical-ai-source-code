@@ -42,102 +42,11 @@ import {
 import { Button } from "@/components/ui/button";
 import { motion, AnimatePresence } from "framer-motion";
 import logo from "@/assets/logo.png";
+import { usePlatformNavItems } from "@/lib/use-platform-nav";
+import { useIndustryNavItems } from "@/lib/use-industry-nav";
 
-export const navPlatformOs = [
-  {
-    name: "Maestro",
-    desc: "Orchestration Brain",
-    href: "/platform-detail?slug=maestro",
-    icon: Brain,
-  },
-  {
-    name: "Mozhi",
-    desc: "Human-like Voice Agents",
-    href: "/platform-detail?slug=vocalis",
-    icon: Mic2,
-  },
-  {
-    name: "Guardian",
-    desc: "Compliance & Audit Agents",
-    href: "/platform-detail?slug=guardian",
-    icon: ShieldCheck,
-  },
-  {
-    name: "Insights",
-    desc: "Analytics & Intelligence Agents",
-    href: "/platform-detail?slug=insights",
-    icon: BarChart3,
-  },
-  {
-    name: "Conversa",
-    desc: "Intelligent Chat Agents",
-    href: "/platform-detail?slug=conversa",
-    icon: MessagesSquare,
-  },
-];
-
-export const navIndustries = [
-  {
-    name: "BFSI",
-    desc: "Banking, Financial Services & Insurance",
-    icon: Landmark,
-    href: "/industry-detail?slug=bfsi",
-  },
-  {
-    name: "Healthcare",
-    desc: "Patient care & medical automation",
-    icon: Activity,
-    href: "/industry-detail?slug=healthcare",
-  },
-  {
-    name: "Telecom",
-    desc: "Customer support & network insights",
-    icon: PhoneCall,
-    href: "/industry-detail?slug=telecom",
-  },
-  {
-    name: "E-commerce",
-    desc: "Personalized shopping experiences",
-    icon: ShoppingBag,
-    href: "/industry-detail?slug=ecommerce",
-  },
-  {
-    name: "Automotive",
-    desc: "Smart dealership & service agents",
-    icon: Car,
-    href: "/industry-detail?slug=automotive",
-  },
-  {
-    name: "EdTech",
-    desc: "Adaptive learning & student support",
-    icon: BookOpen,
-    href: "/industry-detail?slug=edtech",
-  },
-  {
-    name: "BPO",
-    desc: "Scaled operational efficiency",
-    icon: Headset,
-    href: "/industry-detail?slug=bpo",
-  },
-  {
-    name: "Microfinance",
-    desc: "Inclusive financial technology",
-    icon: Coins,
-    href: "/industry-detail?slug=microfinance",
-  },
-  {
-    name: "Travel",
-    desc: "Itinerary planning & booking bots",
-    icon: Plane,
-    href: "/industry-detail?slug=travel",
-  },
-  {
-    name: "HR Services",
-    desc: "Automated recruitment & onboarding",
-    icon: UserPlus,
-    href: "/industry-detail?slug=hr-services",
-  },
-];
+const platformIcons = [Brain, Mic2, ShieldCheck, BarChart3, MessagesSquare, Cpu];
+const industryIcons = [Landmark, Activity, PhoneCall, ShoppingBag, Car, BookOpen, Headset, Coins, Plane, UserPlus];
 
 export const navWhyTheVerticalAI = [
   {
@@ -241,6 +150,8 @@ interface HeaderProps {
 export default function Header({ visible = true }: HeaderProps) {
   const router = useRouter();
   const pathname = usePathname();
+  const navPlatformOs = usePlatformNavItems();
+  const navIndustries = useIndustryNavItems();
   const [scrolled, setScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [navigating, setNavigating] = useState(false);
@@ -370,7 +281,9 @@ export default function Header({ visible = true }: HeaderProps) {
                             className="overflow-hidden"
                           >
                             <div className="grid grid-cols-2 gap-y-4 gap-x-6 pb-6 pt-2">
-                              {navPlatformOs.map((item) => (
+                              {navPlatformOs.map((item, idx) => {
+                                const Icon = platformIcons[idx % platformIcons.length];
+                                return (
                                 <Link
                                   key={item.name}
                                   href={item.href}
@@ -378,7 +291,7 @@ export default function Header({ visible = true }: HeaderProps) {
                                   className="group flex items-center gap-3"
                                 >
                                   <div className="w-8 h-8 rounded-lg bg-gray-50 flex items-center justify-center group-hover:bg-primary/10 transition-colors shrink-0">
-                                    <item.icon
+                                    <Icon
                                       size={16}
                                       className="text-gray-400 group-hover:text-primary transition-colors"
                                     />
@@ -387,7 +300,8 @@ export default function Header({ visible = true }: HeaderProps) {
                                     {item.name}
                                   </span>
                                 </Link>
-                              ))}
+                                );
+                              })}
                             </div>
                           </motion.div>
                         )}
@@ -418,7 +332,9 @@ export default function Header({ visible = true }: HeaderProps) {
                             className="overflow-hidden"
                           >
                             <div className="grid grid-cols-2 gap-y-4 gap-x-6 pb-6 pt-2">
-                              {navIndustries.map((item) => (
+                              {navIndustries.map((item, idx) => {
+                                const Icon = industryIcons[idx % industryIcons.length];
+                                return (
                                 <Link
                                   key={item.name}
                                   href={item.href}
@@ -426,7 +342,7 @@ export default function Header({ visible = true }: HeaderProps) {
                                   className="group flex items-center gap-3"
                                 >
                                   <div className="w-8 h-8 rounded-lg bg-gray-50 flex items-center justify-center group-hover:bg-primary/10 transition-colors shrink-0">
-                                    <item.icon
+                                    <Icon
                                       size={16}
                                       className="text-gray-400 group-hover:text-primary transition-colors"
                                     />
@@ -435,7 +351,8 @@ export default function Header({ visible = true }: HeaderProps) {
                                     {item.name}
                                   </span>
                                 </Link>
-                              ))}
+                                );
+                              })}
                             </div>
                           </motion.div>
                         )}
@@ -646,14 +563,16 @@ export default function Header({ visible = true }: HeaderProps) {
                   className={`absolute top-full left-1/2 -translate-x-1/2 pt-2 transition-all duration-300 ease-in-out w-[280px] ${hoveredDropdown === "platform" && !navigating ? "opacity-100 visible" : "opacity-0 invisible pointer-events-none"}`}
                 >
                   <div className="bg-white rounded-2xl shadow-xl border border-gray-100 p-3 flex flex-col gap-1 relative overflow-hidden">
-                    {navPlatformOs.map((item) => (
+                    {navPlatformOs.map((item, idx) => {
+                      const Icon = platformIcons[idx % platformIcons.length];
+                      return (
                       <div
                         key={item.name}
                         onClick={() => handleNavClick(item.href)}
                         className="group/item flex items-start gap-3 p-3 rounded-xl hover:bg-gray-50 transition-colors cursor-pointer"
                       >
                         <div className="mt-1 w-10 h-10 rounded-lg bg-primary/5 flex items-center justify-center group-hover/item:bg-primary/10 transition-colors">
-                          <item.icon
+                          <Icon
                             size={20}
                             className="text-gray-600 group-hover/item:text-primary transition-colors"
                           />
@@ -672,7 +591,8 @@ export default function Header({ visible = true }: HeaderProps) {
                           </span>
                         </div>
                       </div>
-                    ))}
+                      );
+                    })}
                   </div>
                 </div>
               </li>
@@ -708,14 +628,16 @@ export default function Header({ visible = true }: HeaderProps) {
                 >
                   <div className="bg-white rounded-2xl shadow-xl border border-gray-100 p-6 relative overflow-hidden">
                     <div className="grid grid-cols-3 gap-x-6 gap-y-4">
-                      {navIndustries.map((item) => (
+                      {navIndustries.map((item, idx) => {
+                        const Icon = industryIcons[idx % industryIcons.length];
+                        return (
                         <div
                           key={item.name}
                           onClick={() => handleNavClick(item.href)}
                           className="group/item flex items-start gap-4 p-2 rounded-xl hover:bg-gray-50 transition-colors cursor-pointer"
                         >
                           <div className="mt-1 w-10 h-10 rounded-lg bg-primary/5 flex items-center justify-center group-hover/item:bg-primary/10 transition-colors shrink-0">
-                            <item.icon
+                            <Icon
                               size={20}
                               className="text-gray-600 group-hover/item:text-primary transition-colors"
                             />
@@ -734,7 +656,8 @@ export default function Header({ visible = true }: HeaderProps) {
                             </span>
                           </div>
                         </div>
-                      ))}
+                        );
+                      })}
                     </div>
                   </div>
                 </div>

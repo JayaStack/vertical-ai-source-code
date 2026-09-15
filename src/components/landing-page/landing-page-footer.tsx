@@ -5,7 +5,8 @@ import { Facebook, Linkedin, Instagram } from "lucide-react"
 import { TextHoverEffect } from "@/components/ui/text-hover-effect";
 import Image from "next/image";
 import AdLogo from "@/assets/white-logo.png";
-import { navPlatformOs, navIndustries } from "@/components/landing-page/header";
+import { usePlatformNavItems } from "@/lib/use-platform-nav";
+import { useIndustryNavItems } from "@/lib/use-industry-nav";
 
 const XIcon = ({ className }: { className?: string }) => (
   <svg 
@@ -18,6 +19,8 @@ const XIcon = ({ className }: { className?: string }) => (
 );
 
 const LandingPageFooter = () => {
+  const navPlatformOs = usePlatformNavItems();
+  const navIndustries = useIndustryNavItems();
 
   return (
     // <footer className="bg-black relative overflow-hidden text-white pb-8 px- sm:px-6 md:px-12 border-t border-white/10">

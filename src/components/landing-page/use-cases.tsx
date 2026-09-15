@@ -4,11 +4,6 @@ import React, { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import { motion, useInView, useScroll, useTransform, useSpring } from "framer-motion";
 import Link from "next/link";
-import image1 from "@/assets/Landing-page/ai-in-action/1.jpg";
-import image2 from "@/assets/Landing-page/ai-in-action/2.jpg";
-import image3 from "@/assets/Landing-page/ai-in-action/3.jpg";
-import image4 from "@/assets/Landing-page/ai-in-action/4.jpg";
-import image5 from "@/assets/Landing-page/ai-in-action/5.jpg";
 
 // ─── Types ──────────────────────────────────────────────────────────────────
 
@@ -18,53 +13,38 @@ interface ServiceItem {
   description: string;
   imageSrc: string;
   imageAlt: string;
-  url:string
+  url: string;
 }
 
-// ─── Data ───────────────────────────────────────────────────────────────────
+// ─── Data (fetched from /api/platforms) ──────────────────────────────────────
 
-const services: ServiceItem[] = [
-  {
-    id: 1,
-    title: "Maestro OS - Orchestration Brain",
-    description: "Orchestrates AI, humans, and systems for real-time, policy-driven execution.",
-    imageSrc: image1.src,
-    imageAlt: "Maestro OS - Orchestration Brain",
-    url: "/platform-detail?slug=maestro"
-  },
-  {
-    id: 2,
-    title: "Conversa OS - Intelligent Chat Agents",
-    description: "AI agents manage voice and digital interactions, executing workflows at scale.",
-    imageSrc: image2.src,
-    imageAlt: "Conversa OS - Intelligent Chat Agents",
-    url: "/platform-detail?slug=conversa"
-  },
-  {
-    id: 3,
-    title: "Guardian OS - Compliance & Audit Agents",
-    description: "Ensures real-time compliance with fully auditable, policy-driven actions.",
-    imageSrc: image3.src,
-    imageAlt: "Guardian OS - Compliance & Audit Agents",
-    url: "/platform-detail?slug=guardian"
-  },
-  {
-    id: 4,
-    title: "Insights OS - Analytics & Intelligence Agents",
-    description: "Turns data into real-time insights to guide and optimize decisions.",
-    imageSrc: image4.src,
-    imageAlt: "Insights OS - Analytics & Intelligence Agents",
-    url: "/platform-detail?slug=insights"
-  },
-  {
-    id: 5,
-    title: "Vocalis OS - Human-like Voice Agents",
-    description: "AI voice agents that handle inbound and outbound calls with human-like latency and emotion.",
-    imageSrc: image5.src,
-    imageAlt: "Vocalis OS - Human-like Voice Agents",
-    url: "/platform-detail?slug=vocalis"
-  }
-];
+function usePlatformServices(): ServiceItem[] {
+  const [services, setServices] = useState<ServiceItem[]>([]);
+
+  useEffect(() => {
+    fetch("/api/platforms")
+      .then((res) => res.json())
+      .then((json) => {
+        if (json.success) {
+          const mapped: ServiceItem[] = json.data.map((p: any, i: number) => {
+            const subtitle = (p.heroTitle || "").replace(/^The\s+/i, "").replace(/\s+OS$/i, "");
+            return {
+              id: i + 1,
+              title: subtitle ? `${p.name} OS - ${subtitle}` : `${p.name} OS`,
+              description: p.heroDescription || "",
+              imageSrc: p.heroImageUrl,
+              imageAlt: `${p.name} OS`,
+              url: `/platform-detail?slug=${p.slug}`,
+            };
+          });
+          setServices(mapped);
+        }
+      })
+      .catch(console.error);
+  }, []);
+
+  return services;
+}
 
 // ─── Service Card ────────────────────────────────────────────────────────────
 
@@ -200,6 +180,7 @@ function HorizontalScrollHeader() {
 // ─── Main Component ──────────────────────────────────────────────────────────
 
 export default function ServicesHorizontalScroll() {
+  const services = usePlatformServices();
   const [hoveredId, setHoveredId] = React.useState<number | null>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const trackRef = useRef<HTMLDivElement>(null);
