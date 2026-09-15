@@ -30,6 +30,7 @@ export default function GetDemoPage() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
   const [countryCode, setCountryCode] = useState("");
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -50,10 +51,11 @@ export default function GetDemoPage() {
       return;
     }
     setIsSubmitting(true);
-    
+    setErrorMessage(null);
+
     try {
       const finalMessage = formData.message === 'Other' ? formData.otherMessage : formData.message;
-      const response = await fetch('https://thevertical.top/App/api.php?gofor=bookdemo', {
+      const response = await fetch('/api/get-demo', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -61,24 +63,24 @@ export default function GetDemoPage() {
         body: JSON.stringify({
           name: formData.name,
           email: formData.email,
-          phone: countryCode.trim() 
-            ? `+${countryCode.replace(/\+/g, '').trim()} ${formData.phone}`.trim() 
+          phone: countryCode.trim()
+            ? `+${countryCode.replace(/\+/g, '').trim()} ${formData.phone}`.trim()
             : formData.phone.trim(),
           company: formData.company,
           message: finalMessage,
         }),
-        mode: 'cors'
       });
 
-      if (response.ok) {
+      const result = await response.json();
+
+      if (response.ok && result.success) {
         setSubmitted(true);
       } else {
-        // Fallback for non-OK responses
-        setSubmitted(true);
+        setErrorMessage(result.error || "Failed to submit your request. Please try again.");
       }
     } catch (error) {
       console.error("Error submitting form:", error);
-      setSubmitted(true); 
+      setErrorMessage("Network error. Please check your connection and try again.");
     } finally {
       setIsSubmitting(false);
     }
@@ -153,6 +155,7 @@ export default function GetDemoPage() {
                       onClick={() => {
                         setSubmitted(false);
                         setCountryCode("");
+                        setErrorMessage(null);
                         setFormData({ name: '', email: '', phone: '', company: '', message: '', otherMessage: '' });
                       }}
                       variant="outline"
@@ -310,8 +313,12 @@ export default function GetDemoPage() {
                         </div>
                       </div>
 
-                      <Button 
-                        type="submit" 
+                      {errorMessage && (
+                        <p className="text-sm font-medium text-red-500 text-center">{errorMessage}</p>
+                      )}
+
+                      <Button
+                        type="submit"
                         disabled={isSubmitting}
                         className="w-full h-14 bg-primary hover:bg-primary/90 text-white rounded-xl text-lg font-bold transition-all shadow-lg shadow-primary/25 disabled:opacity-70 disabled:cursor-not-allowed group mt-2"
                       >
