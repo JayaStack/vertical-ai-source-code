@@ -7,8 +7,8 @@ import { useRouter } from 'next/navigation';
 
 interface Step {
     title: string;
-    desc: string;
-    image: string;
+    description: string;
+    imageUrl: string;
 }
 
 
@@ -31,8 +31,8 @@ const VerticalStep = ({ step, index }: { step: Step; index: number }) => {
                 {/* Visual side - The "Animated Gif / Video" area */}
                 <div className="w-full md:w-[50%] relative min-h-[250px] md:min-h-[300px] lg:min-h-full bg-slate-100 border-b md:border-b-0 md:border-r border-slate-200">
                     <img
-                        key={step.image}
-                        src={step.image}
+                        key={step.imageUrl}
+                        src={step.imageUrl}
                         alt={step.title}
                         className="w-full h-full object-cover"
                     />
@@ -55,7 +55,7 @@ const VerticalStep = ({ step, index }: { step: Step; index: number }) => {
                                 {step.title}
                             </h3>
                             <p className="text-gray-500 text-base md:text-lg leading-relaxed">
-                                {step.desc}
+                                {step.description}
                             </p>
                         </div>
                     </div>

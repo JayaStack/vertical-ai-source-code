@@ -398,9 +398,11 @@ export default function IndustryPage() {
                             initial={{ opacity: 0, scale: 0.9 }}
                             animate={{ opacity: 1, scale: 1 }}
                             transition={{ duration: 0.8, delay: 0.4 }}
-                            className="relative aspect-video rounded-2xl overflow-hidden shadow-2xl shadow-primary/10 bg-white group/video"
+                            className="relative aspect-video rounded-2xl overflow-hidden shadow-2xl shadow-primary/10 bg-gray-100 group/video"
                         >
-                            <Image src={pageData.hero.image || ""} alt="Industry Transformation" fill className="object-cover" />
+                            {pageData.hero.image && (
+                                <Image src={pageData.hero.image} alt="Industry Transformation" fill className="object-cover" />
+                            )}
                         </motion.div>
                     </div>
                 </div>
@@ -466,8 +468,10 @@ export default function IndustryPage() {
                     <div className="grid lg:grid-cols-2 gap-16 lg:gap-10 items-stretch">
 
                         {/* Left Image Display */}
-                        <div className="relative w-full h-full min-h-[400px] rounded-[2rem] overflow-hidden shadow-2xl shadow-slate-200/50">
-                            <Image src={pageData.caseStudy.image || ""} className="object-cover hover:scale-105 transition-transform duration-700" alt="Finance Office" fill sizes="(max-width: 1024px) 100vw, 50vw" />
+                        <div className="relative w-full h-full min-h-[400px] rounded-[2rem] overflow-hidden shadow-2xl shadow-slate-200/50 bg-gray-100">
+                            {pageData.caseStudy.image && (
+                                <Image src={pageData.caseStudy.image} className="object-cover hover:scale-105 transition-transform duration-700" alt="Finance Office" fill sizes="(max-width: 1024px) 100vw, 50vw" />
+                            )}
                             <div className="absolute inset-0 bg-gradient-to-t from-slate-900/40 via-transparent to-transparent pointer-events-none" />
 
                             {/* Floating bottom badge */}

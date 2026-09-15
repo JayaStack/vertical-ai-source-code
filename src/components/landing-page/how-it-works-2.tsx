@@ -5,8 +5,8 @@ import { motion, useScroll, useTransform } from 'framer-motion';
 
 interface Step {
     title: string;
-    image: string;
-    desc: string;
+    imageUrl: string;
+    description: string;
 }
 const ScrollHighlightItem = ({ step, index, scrollYProgress, totalSteps }: { step: Step, index: number, scrollYProgress: any, totalSteps: number }) => {
     const safeTotal = Math.max(1, totalSteps);
@@ -31,7 +31,7 @@ const ScrollHighlightItem = ({ step, index, scrollYProgress, totalSteps }: { ste
                     {index + 1}. {step.title}
                 </span>
                 <p className="text-gray-600 text-sm md:text-base leading-relaxed">
-                    {step.desc}
+                    {step.description}
                 </p>
             </div>
         </motion.div>
@@ -84,7 +84,7 @@ export default function HowItWorks2({ data }: { data?: any }) {
                                 >
                                     <div className="relative w-full h-full">
                                         <img
-                                            src={step.image}
+                                            src={step.imageUrl}
                                             alt={step.title}
                                             className="w-full h-full object-cover"
                                         />
@@ -121,7 +121,7 @@ export default function HowItWorks2({ data }: { data?: any }) {
                                     className="w-full aspect-[4/3] rounded-3xl overflow-hidden shadow-xl border border-gray-100 bg-white"
                                 >
                                     <img
-                                        src={step.image}
+                                        src={step.imageUrl}
                                         alt={step.title}
                                         className="w-full h-full object-cover"
                                     />
@@ -137,7 +137,7 @@ export default function HowItWorks2({ data }: { data?: any }) {
                                         {index + 1}. {step.title}
                                     </span>
                                     <p className="text-gray-600 text-base leading-relaxed">
-                                        {step.desc}
+                                        {step.description}
                                     </p>
                                 </motion.div>
                             </div>

@@ -296,12 +296,14 @@ export default function PlatformDetailPage() {
                                                     </div>
                                                 </div>
                                             </aside>
-                                            <figure className={`max-w-[905px] w-full mx-auto col-span-12 rounded-t-[32px] overflow-hidden md:col-span-7 lg:col-span-8 group-hover/card-img:scale-105 transition-transform duration-700 ease-in-out ${idx % 2 !== 0 ? 'lg:order-1' : ''}`}>
-                                                <img
-                                                    src={card.image || ""}
-                                                    alt={card.title}
-                                                    className="w-full h-full object-cover shadow-2xl"
-                                                />
+                                            <figure className={`max-w-[905px] w-full mx-auto col-span-12 rounded-t-[32px] overflow-hidden md:col-span-7 lg:col-span-8 bg-gray-100 group-hover/card-img:scale-105 transition-transform duration-700 ease-in-out ${idx % 2 !== 0 ? 'lg:order-1' : ''}`}>
+                                                {card.imageUrl && (
+                                                    <img
+                                                        src={card.imageUrl}
+                                                        alt={card.title}
+                                                        className="w-full h-full object-cover shadow-2xl"
+                                                    />
+                                                )}
                                             </figure>
                                         </div>
                                     </div>
@@ -335,12 +337,14 @@ export default function PlatformDetailPage() {
                                                     </div>
                                                 </div>
                                             </aside>
-                                            <figure className={`h-[250px] md:h-[300px] lg:h-full w-full mx-auto col-span-12 rounded-2xl overflow-hidden md:col-span-6 group-hover/card-img:scale-105 transition-transform duration-700 ${idx % 2 !== 0 ? 'order-none md:order-2' : ''}`}>
-                                                <img
-                                                    src={card.image || ""}
-                                                    alt={card.title}
-                                                    className="w-full h-full object-cover"
-                                                />
+                                            <figure className={`h-[250px] md:h-[300px] lg:h-full w-full mx-auto col-span-12 rounded-2xl overflow-hidden md:col-span-6 bg-gray-100 group-hover/card-img:scale-105 transition-transform duration-700 ${idx % 2 !== 0 ? 'order-none md:order-2' : ''}`}>
+                                                {card.imageUrl && (
+                                                    <img
+                                                        src={card.imageUrl}
+                                                        alt={card.title}
+                                                        className="w-full h-full object-cover"
+                                                    />
+                                                )}
                                             </figure>
                                         </div>
                                     </div>
