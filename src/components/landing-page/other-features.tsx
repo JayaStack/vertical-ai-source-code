@@ -9,7 +9,6 @@ interface Feature {
     id: string;
     title: string;
     description: string;
-    icon: any;
     image: string;
 }
 
@@ -95,7 +94,12 @@ const FeatureCard = ({ feature, index }: { feature: Feature, index: number }) =>
 };
 
 export default function OtherFeatures({ data }: { data?: any }) {
-    const features = data?.features || defaultFeatures;
+    const features: Feature[] = (data?.features || defaultFeatures).map((f: any, i: number) => ({
+        id: f.id || f.slug || `feature-${i}`,
+        title: f.title,
+        description: f.description,
+        image: f.image || f.imageUrl,
+    }));
     const title = data?.title || "Modernizing Operations -";
     const titleHighlight = data?.titleHighlight || "Beyond the Limits of Legacy Systems";
     const description = data?.description || "Operations today are fragmented across teams, tools, and channels:";

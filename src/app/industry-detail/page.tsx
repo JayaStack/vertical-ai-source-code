@@ -268,7 +268,14 @@ export default function IndustryPage() {
                             items: row.transformationLegacy || [],
                             outcomes: row.transformationOutcomes || [],
                         },
-                        caseStudy: row.caseStudy || {},
+                        caseStudy: {
+                            title: row.caseStudy?.title,
+                            titleHighlight: row.caseStudy?.titleHighlight,
+                            challenge: row.caseStudy?.challenge,
+                            solution: row.caseStudy?.solution,
+                            image: row.caseStudy?.image || row.caseStudy?.imageUrl,
+                            results: row.caseStudy?.results || row.caseStudy?.bulletResults || [],
+                        },
                         verticalProduct: {
                             title: row.pillarsTitle,
                             titleHighlight: row.pillarsTitleHighlight,
@@ -278,18 +285,44 @@ export default function IndustryPage() {
                         agentMapping: {
                             title: row.agentsTitle,
                             titleHighlight: row.agentsTitleHighlight,
-                            agents: row.agentCards || [],
+                            agents: (row.agentCards || []).map((a: any) => ({
+                                title: a.title || a.name,
+                                subtitle: a.subtitle || a.tagline,
+                                bullets: a.bullets || a.bulletPoints || [],
+                                imageUrl: a.imageUrl || a.image,
+                            })),
                         },
                         compliance: {
                             title: row.complianceTitle,
                             titleHighlight: row.complianceTitleHighlight,
-                            items: row.complianceCards || [],
+                            items: (row.complianceCards || []).map((c: any) => ({
+                                title: c.title || c.name,
+                                desc: c.desc || c.description,
+                                tags: c.tags || [c.tag1, c.tag2].filter(Boolean),
+                                imageUrl: c.imageUrl || c.image,
+                            })),
                         },
-                        useCases: row.useCases || [],
+                        useCases: (row.useCases || []).map((u: any) => ({
+                            id: u.id || u.slug,
+                            label: u.label || u.title,
+                            tag: u.tag || u.badge,
+                            content: u.content || {
+                                title: u.content?.title || u.subtitle || u.title,
+                                desc: u.content?.desc || u.description,
+                                capabilities: u.content?.capabilities || u.capabilities || [],
+                                outcomes: u.content?.outcomes || u.outcomes || [],
+                            },
+                        })),
                         metrics: {
                             title: row.metricsTitle,
                             titleHighlight: row.metricsTitleHighlight,
-                            items: row.metrics || [],
+                            items: (row.metrics || []).map((m: any) => ({
+                                prefix: m.prefix,
+                                num: m.num ?? m.value,
+                                sym: m.sym || m.suffix,
+                                label: m.label,
+                                desc: m.desc || m.description,
+                            })),
                         },
                         finalCta: {
                             title: row.ctaTitle,
@@ -419,7 +452,7 @@ export default function IndustryPage() {
                                 <div className="flex w-max gap-8 lg:gap-12 items-center justify-start animate-marquee">
 
                                     {/* Static logos array */}
-                                    {pageData.trustedLogos.slice(0, 6).map((logoPath: string, i: number) => (
+                                    {(pageData.trustedLogos || []).slice(0, 6).map((logoPath: string, i: number) => (
                                         <img
                                             key={i}
                                             src={logoPath}
@@ -429,7 +462,7 @@ export default function IndustryPage() {
                                     ))}
 
                                     {/* Duplicate logos array for infinite loop */}
-                                    {pageData.trustedLogos.slice(0, 6).map((logoPath: string, i: number) => (
+                                    {(pageData.trustedLogos || []).slice(0, 6).map((logoPath: string, i: number) => (
                                         <img
                                             key={"dup-" + i}
                                             src={logoPath}
@@ -522,7 +555,7 @@ export default function IndustryPage() {
                                         <span className="text-green-600 font-bold text-base">Measurable Results</span>
                                     </div>
                                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-y-4 gap-x-8">
-                                        {pageData.caseStudy.results.map((result: string, i: number) => (
+                                        {(pageData.caseStudy.results || []).map((result: string, i: number) => (
                                             <div key={i} className="flex items-start gap-3 group">
                                                 <div className="w-5 h-5 rounded-full bg-gray-100 flex items-center justify-center border border-slate-100 mt-0.5 group-hover:border-green-200 group-hover:bg-green-50 transition-colors">
                                                     <div className="w-1.5 h-1.5 rounded-full bg-gray-300 group-hover:bg-green-500 transition-colors" />
@@ -579,7 +612,7 @@ export default function IndustryPage() {
                                         subtitle={firstAgent.subtitle}
                                         desc={
                                             <ul className="space-y-4 text-left">
-                                                {firstAgent.bullets.map((bullet: string, idx: number) => (
+                                                {(firstAgent.bullets || []).map((bullet: string, idx: number) => (
                                                     <li key={idx} className="flex items-start gap-3">
                                                         <div className="w-1.5 h-1.5 rounded-full bg-primary mt-2.5 shrink-0" />
                                                         <span>{bullet}</span>
@@ -608,7 +641,7 @@ export default function IndustryPage() {
                                                     subtitle={agent.subtitle}
                                                     desc={
                                                         <ul className="space-y-2 text-left">
-                                                            {agent.bullets.map((bullet: string, bIdx: number) => (
+                                                            {(agent.bullets || []).map((bullet: string, bIdx: number) => (
                                                                 <li key={bIdx} className="flex items-start gap-3">
                                                                     <div className={`w-1.5 h-1.5 rounded-full ${iconBgs[originalIdx % iconBgs.length]} mt-2.5 shrink-0`} />
                                                                     <span>{bullet}</span>
@@ -637,7 +670,7 @@ export default function IndustryPage() {
                                                     subtitle={agent.subtitle}
                                                     desc={
                                                         <ul className="space-y-2 text-left">
-                                                            {agent.bullets.map((bullet: string, bIdx: number) => (
+                                                            {(agent.bullets || []).map((bullet: string, bIdx: number) => (
                                                                 <li key={bIdx} className="flex items-start gap-3">
                                                                     <div className={`w-1.5 h-1.5 rounded-full ${iconBgs[originalIdx % iconBgs.length]} mt-2.5 shrink-0`} />
                                                                     <span>{bullet}</span>
@@ -726,7 +759,7 @@ export default function IndustryPage() {
                     </div>
 
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 max-w-6xl mx-auto">
-                        {pageData.metrics.items.map((stat: any, i: number) => {
+                        {(pageData.metrics.items || []).map((stat: any, i: number) => {
                             const statIcons = [TrendingDown, Activity, ShieldAlert, ShieldCheck];
                             const Icon = statIcons[i % statIcons.length];
 
@@ -904,7 +937,7 @@ function GovernanceShowcase({ data }: { data?: any }) {
                         <div className={`p-8 md:p-10 transition-all duration-500 relative z-10 h-full flex flex-col justify-center md:justify-end ${activeIndex === idx ? 'bg-white/10 backdrop-blur-md' : 'bg-black/40 md:bg-transparent hover:bg-white/5'}`}>
                             {/* Tags */}
                             <div className="flex flex-wrap gap-2 mb-4">
-                                {item.tags.map((tag: string) => (
+                                {(item.tags || []).map((tag: string) => (
                                     <span key={tag} className="px-3 py-1 md:px-4 md:py-1 rounded-full border border-white/30 text-[10px] font-bold text-white backdrop-blur-sm">
                                         {tag}
                                     </span>
