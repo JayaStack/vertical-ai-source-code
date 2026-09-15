@@ -1,6 +1,6 @@
 "use client";
 
-import React from 'react';
+import React, { useState } from 'react';
 import { motion } from "framer-motion";
 import Header from "@/components/landing-page/header";
 import PageHero from "@/components/landing-page/page-hero";
@@ -17,6 +17,7 @@ import {
 } from "@/components/ui/select";
 import banner from "@/assets/company/support/banner.webp"
 import supportHero from "@/assets/company/support/main.webp"
+import toast, { Toaster } from "react-hot-toast";
 
 const supportChannels = [
   {
@@ -47,8 +48,69 @@ const supportChannels = [
 
 
 export default function SupportPage() {
+  const [fullName, setFullName] = useState("");
+  const [workEmail, setWorkEmail] = useState("");
+  const [supportCategory, setSupportCategory] = useState("");
+  const [message, setMessage] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isSubmitted, setIsSubmitted] = useState(false);
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+
+    if (!fullName.trim()) {
+      toast.error("Please enter your full name");
+      return;
+    }
+    if (!workEmail.trim() || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(workEmail.trim())) {
+      toast.error("Please enter a valid work email");
+      return;
+    }
+    if (!supportCategory) {
+      toast.error("Please select a support category");
+      return;
+    }
+    if (!message.trim()) {
+      toast.error("Please describe your issue");
+      return;
+    }
+
+    setIsSubmitting(true);
+
+    try {
+      const response = await fetch("/api/support", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          fullName: fullName.trim(),
+          workEmail: workEmail.trim(),
+          supportCategory,
+          message: message.trim(),
+        }),
+      });
+
+      const result = await response.json();
+
+      if (response.ok && result.success) {
+        setIsSubmitted(true);
+        setFullName("");
+        setWorkEmail("");
+        setSupportCategory("");
+        setMessage("");
+        toast.success("Support case submitted successfully!");
+      } else {
+        toast.error(result.error || "Failed to submit support case. Please try again.");
+      }
+    } catch (error) {
+      toast.error("Network error. Please check your connection and try again.");
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
   return (
     <div className="min-h-screen bg-white">
+      <Toaster position="top-right" />
       <Header visible={true} />
 
       <PageHero
@@ -134,16 +196,34 @@ export default function SupportPage() {
                     <p className="text-gray-500 font-medium">Connect directly with our engineering team for specialized assistance.</p>
                   </div>
 
-                  <form className="space-y-4 md:space-y-6">
+                  {isSubmitted ? (
+                    <div className="flex flex-col items-center text-center py-10">
+                      <div className="w-16 h-16 rounded-full bg-primary/10 text-primary flex items-center justify-center mb-6">
+                        <CheckCircle2 size={32} />
+                      </div>
+                      <h4 className="text-xl font-bold text-gray-900 mb-2">Support case submitted</h4>
+                      <p className="text-gray-500 mb-6">Our engineering team will get back to you shortly.</p>
+                      <button
+                        onClick={() => setIsSubmitted(false)}
+                        className="px-6 py-2.5 rounded-xl bg-gray-100 text-gray-900 font-bold hover:bg-gray-200 transition-colors cursor-pointer"
+                      >
+                        Submit another case
+                      </button>
+                    </div>
+                  ) : (
+                  <form className="space-y-4 md:space-y-6" onSubmit={handleSubmit}>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                       <div className="space-y-2">
                         <label className="text-base text-gray-900 ml-1">Full Name</label>
                         <div className="relative group">
                           <User className="absolute left-6 top-1/2 -translate-y-1/2 text-gray-400 group-focus-within:text-primary transition-colors" size={18} />
-                          <input 
-                            type="text" 
+                          <input
+                            type="text"
+                            value={fullName}
+                            onChange={(e) => setFullName(e.target.value)}
+                            disabled={isSubmitting}
                             placeholder="e.g. Elena Rodriguez"
-                            className="w-full h-14 pl-14 pr-6 rounded-2xl bg-gray-100 border border-transparent focus:bg-white focus:border-primary/20  outline-none transition-all text-gray-900 font-medium placeholder:text-gray-300"
+                            className="w-full h-14 pl-14 pr-6 rounded-2xl bg-gray-100 border border-transparent focus:bg-white focus:border-primary/20  outline-none transition-all text-gray-900 font-medium placeholder:text-gray-300 disabled:opacity-60"
                           />
                         </div>
                       </div>
@@ -151,10 +231,13 @@ export default function SupportPage() {
                         <label className="text-base text-gray-900 ml-1">Work Email</label>
                         <div className="relative group">
                           <Mail className="absolute left-6 top-1/2 -translate-y-1/2 text-gray-400 group-focus-within:text-primary transition-colors" size={18} />
-                          <input 
-                            type="email" 
+                          <input
+                            type="email"
+                            value={workEmail}
+                            onChange={(e) => setWorkEmail(e.target.value)}
+                            disabled={isSubmitting}
                             placeholder="elena@enterprise.ai"
-                            className="w-full h-14 pl-14 pr-6 rounded-2xl bg-gray-100 border border-transparent focus:bg-white focus:border-primary/20  outline-none transition-all text-gray-900 font-medium placeholder:text-gray-300"
+                            className="w-full h-14 pl-14 pr-6 rounded-2xl bg-gray-100 border border-transparent focus:bg-white focus:border-primary/20  outline-none transition-all text-gray-900 font-medium placeholder:text-gray-300 disabled:opacity-60"
                           />
                         </div>
                       </div>
@@ -162,34 +245,42 @@ export default function SupportPage() {
 
                     <div className="space-y-2">
                       <label className="text-base text-gray-900 ml-1">Support Category</label>
-                      <Select>
+                      <Select value={supportCategory} onValueChange={setSupportCategory} disabled={isSubmitting}>
                         <SelectTrigger className="w-full py-4 md:py-7 px-5 md:px-8 h-auto rounded-2xl bg-gray-100 border border-transparent focus:bg-white focus:border-primary/20  outline-none transition-all text-gray-900 font-bold shadow-inner flex items-center justify-between">
-                          <SelectValue placeholder="Technical Implementation" />
+                          <SelectValue placeholder="Select a category..." />
                         </SelectTrigger>
                         <SelectContent className="bg-white border-gray-100 rounded-2xl shadow-2xl">
-                          <SelectItem value="technical" className="py-3 px-6 font-bold text-gray-900 border-b border-gray-50 last:border-0 hover:bg-primary hover:text-white transition-colors">Technical Implementation</SelectItem>
-                          <SelectItem value="security" className="py-3 px-6 font-bold text-gray-900 border-b border-gray-50 last:border-0 hover:bg-primary hover:text-white transition-colors">Security & Governance Audit</SelectItem>
-                          <SelectItem value="deployment" className="py-3 px-6 font-bold text-gray-900 border-b border-gray-50 last:border-0 hover:bg-primary hover:text-white transition-colors">Deployment Architecture</SelectItem>
-                          <SelectItem value="performance" className="py-3 px-6 font-bold text-gray-900 border-b border-gray-50 last:border-0 hover:bg-primary hover:text-white transition-colors">Performance Optimization</SelectItem>
+                          <SelectItem value="Technical Implementation" className="py-3 px-6 font-bold text-gray-900 border-b border-gray-50 last:border-0 hover:bg-primary hover:text-white transition-colors">Technical Implementation</SelectItem>
+                          <SelectItem value="Security & Governance Audit" className="py-3 px-6 font-bold text-gray-900 border-b border-gray-50 last:border-0 hover:bg-primary hover:text-white transition-colors">Security & Governance Audit</SelectItem>
+                          <SelectItem value="Deployment Architecture" className="py-3 px-6 font-bold text-gray-900 border-b border-gray-50 last:border-0 hover:bg-primary hover:text-white transition-colors">Deployment Architecture</SelectItem>
+                          <SelectItem value="Performance Optimization" className="py-3 px-6 font-bold text-gray-900 border-b border-gray-50 last:border-0 hover:bg-primary hover:text-white transition-colors">Performance Optimization</SelectItem>
                         </SelectContent>
                       </Select>
                     </div>
 
                     <div className="space-y-2">
                       <label className="text-base text-gray-900 ml-1">Detailed Message</label>
-                      <textarea 
+                      <textarea
                         rows={5}
+                        value={message}
+                        onChange={(e) => setMessage(e.target.value)}
+                        disabled={isSubmitting}
                         placeholder="Please describe your technical requirement or issue..."
-                        className="w-full p-5 md:p-6 rounded-2xl bg-gray-100 border border-transparent focus:bg-white focus:border-primary/20  outline-none transition-all text-gray-900 font-medium placeholder:text-gray-300 resize-none"
+                        className="w-full p-5 md:p-6 rounded-2xl bg-gray-100 border border-transparent focus:bg-white focus:border-primary/20  outline-none transition-all text-gray-900 font-medium placeholder:text-gray-300 resize-none disabled:opacity-60"
                       />
                     </div>
 
-                    <button className="w-full sm:w-fit px-8 py-3 mt-4 md:mt-0 rounded-2xl bg-primary text-white font-bold hover:!bg-black hover:-translate-y-1 hover:scale-105 active:scale-95 transition-all duration-300 shadow-xl hover:shadow-primary/20 flex items-center justify-center gap-3 group relative overflow-hidden cursor-pointer">
+                    <button
+                      type="submit"
+                      disabled={isSubmitting}
+                      className="w-full sm:w-fit px-8 py-3 mt-4 md:mt-0 rounded-2xl bg-primary text-white font-bold hover:!bg-black hover:-translate-y-1 hover:scale-105 active:scale-95 transition-all duration-300 shadow-xl hover:shadow-primary/20 flex items-center justify-center gap-3 group relative overflow-hidden cursor-pointer disabled:opacity-60 disabled:pointer-events-none"
+                    >
                       <div className="absolute inset-0 bg-gradient-to-r from-white/0 via-white/10 to-white/0 -translate-x-full group-hover:animate-shimmer"></div>
-                      Submit Request
+                      {isSubmitting ? "Submitting..." : "Submit Request"}
                       <ArrowRight size={18} className="group-hover:translate-x-1 transition-transform" />
                     </button>
                   </form>
+                  )}
                 </div>
               </motion.div>
 
