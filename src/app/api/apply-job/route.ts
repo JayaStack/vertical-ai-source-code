@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import nodemailer from "nodemailer";
 import prisma from "@/lib/prisma";
 import { v4 as uuidv4 } from "uuid";
+import { CMS_API_URL } from "@/lib/cms-api";
 
 const RECIPIENT_EMAIL = process.env.SMTP_EMAIL || "harishraghavender2@gmail.com";
 const SMTP_USER = process.env.SMTP_EMAIL || "harishraghavender2@gmail.com";
@@ -46,26 +47,28 @@ export async function POST(request: NextRequest) {
       resumeFilename = resumeFile.name;
     }
 
-    // 1b. Persist the application details (excluding the resume file) to the database
-    await prisma.jobApplication.create({
-      data: {
-        id: uuidv4(),
-        jobTitle,
-        jobCategory,
-        jobLocation,
-        fullName,
-        email,
-        phone,
-        linkedin,
-        currentLocation,
-        totalExperience,
-        noticePeriod,
-        expectedCtc,
-        source,
-        coverLetter,
-        status: "new",
-      },
+    // 1b. Forward the application to the admin CMS's own apply-job endpoint,
+    // which is now responsible for persisting it (replaces the direct Postgres write).
+    // CMS contract: 201 { success: true, id } on success; 400 { error, issues? } on
+    // validation failure; 500 { error } on server error.
+    const cmsResponse = await fetch(`${CMS_API_URL}/api/apply-job`, {
+      method: "POST",
+      body: formData,
     });
+    const cmsResult = await cmsResponse.json().catch(() => null);
+
+    if (!cmsResponse.ok) {
+      // Pass the CMS's status and body straight through (e.g. 400 + issues for
+      // validation failures) instead of collapsing everything to a generic 500.
+      return NextResponse.json(
+        {
+          success: false,
+          error: cmsResult?.error || `CMS apply-job request failed (${cmsResponse.status})`,
+          issues: cmsResult?.issues,
+        },
+        { status: cmsResponse.status }
+      );
+    }
 
     // 2. Prepare HTML Email Content
     const htmlContent = `
@@ -241,6 +244,7 @@ export async function POST(request: NextRequest) {
 
     return NextResponse.json({
       success: true,
+      id: cmsResult?.id,
       message: "Application submitted and emails sent successfully",
     });
   } catch (error: any) {
