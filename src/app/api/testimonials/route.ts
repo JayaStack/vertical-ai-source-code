@@ -1,5 +1,4 @@
 import { NextResponse } from "next/server";
-import prisma from "@/lib/prisma";
 import { fetchCmsResource } from "@/lib/cms-api";
 
 // GET /api/testimonials - List published testimonials (via the admin CMS public API)

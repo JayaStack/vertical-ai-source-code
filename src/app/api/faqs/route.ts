@@ -1,5 +1,4 @@
 import { NextRequest, NextResponse } from "next/server";
-import prisma from "@/lib/prisma";
 import { fetchCmsResource } from "@/lib/cms-api";
 
 // GET /api/faqs - List published FAQs (optional ?scopeKey= filter, via the admin CMS public API)
