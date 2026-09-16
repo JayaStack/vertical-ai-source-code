@@ -1,7 +1,20 @@
+import type { Metadata } from "next";
 import Header from "@/components/landing-page/header";
 import LandingPageFooter from "@/components/landing-page/landing-page-footer";
 import PageHero from "@/components/landing-page/page-hero";
 import { fetchCmsResource } from "@/lib/cms-api";
+import { SITE_URL } from "@/lib/site";
+
+export async function generateMetadata(): Promise<Metadata> {
+  const documents = await fetchCmsResource("/api/public/legal", "documents");
+  const doc: any = documents.find((d: any) => d.slug === "cookies" && d.status === "published");
+
+  return {
+    title: doc?.title || "Cookie Policy",
+    description: "Understand how The Vertical AI uses cookies to improve your experience on our website.",
+    alternates: { canonical: `${SITE_URL}/cookies` },
+  };
+}
 
 export default async function CookiePolicy() {
   const documents = await fetchCmsResource("/api/public/legal", "documents");

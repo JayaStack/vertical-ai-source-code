@@ -26,11 +26,12 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     lastModified: new Date(),
   }));
 
-  const [blogs, caseStudies, industries, careers] = await Promise.all([
+  const [blogs, caseStudies, industries, careers, platforms] = await Promise.all([
     fetchCmsResource("/api/public/blogs", "blogs").catch(() => []),
     fetchCmsResource("/api/public/case-studies", "caseStudies").catch(() => []),
     fetchCmsResource("/api/public/industries", "industries").catch(() => []),
     fetchCmsResource("/api/public/careers", "jobs").catch(() => []),
+    fetchCmsResource("/api/public/platform-os", "platforms").catch(() => []),
   ]);
 
   const blogEntries: MetadataRoute.Sitemap = blogs
@@ -61,5 +62,19 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       lastModified: j.updatedAt ? new Date(j.updatedAt) : new Date(),
     }));
 
-  return [...staticEntries, ...blogEntries, ...caseStudyEntries, ...industryEntries, ...careerEntries];
+  const platformEntries: MetadataRoute.Sitemap = platforms
+    .filter((p: any) => p.status === "published")
+    .map((p: any) => ({
+      url: `${SITE_URL}/platform-detail?slug=${p.slug}`,
+      lastModified: p.updatedAt ? new Date(p.updatedAt) : new Date(),
+    }));
+
+  return [
+    ...staticEntries,
+    ...blogEntries,
+    ...caseStudyEntries,
+    ...industryEntries,
+    ...careerEntries,
+    ...platformEntries,
+  ];
 }

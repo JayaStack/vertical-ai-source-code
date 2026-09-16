@@ -1,7 +1,20 @@
+import type { Metadata } from "next";
 import Header from "@/components/landing-page/header";
 import LandingPageFooter from "@/components/landing-page/landing-page-footer";
 import PageHero from "@/components/landing-page/page-hero";
 import { fetchCmsResource } from "@/lib/cms-api";
+import { SITE_URL } from "@/lib/site";
+
+export async function generateMetadata(): Promise<Metadata> {
+  const documents = await fetchCmsResource("/api/public/legal", "documents");
+  const doc: any = documents.find((d: any) => d.slug === "privacy-policy" && d.status === "published");
+
+  return {
+    title: doc?.title || "Privacy Policy",
+    description: "Read The Vertical AI's Privacy Policy to understand how we collect, use, and protect your data.",
+    alternates: { canonical: `${SITE_URL}/privacy-policy` },
+  };
+}
 
 export default async function PrivacyPolicy() {
   const documents = await fetchCmsResource("/api/public/legal", "documents");

@@ -1,7 +1,20 @@
+import type { Metadata } from "next";
 import Header from "@/components/landing-page/header";
 import LandingPageFooter from "@/components/landing-page/landing-page-footer";
 import PageHero from "@/components/landing-page/page-hero";
 import { fetchCmsResource } from "@/lib/cms-api";
+import { SITE_URL } from "@/lib/site";
+
+export async function generateMetadata(): Promise<Metadata> {
+  const documents = await fetchCmsResource("/api/public/legal", "documents");
+  const doc: any = documents.find((d: any) => d.slug === "security" && d.status === "published");
+
+  return {
+    title: doc?.title || "Security Policy",
+    description: "Learn about The Vertical AI's security practices, compliance, and data protection standards.",
+    alternates: { canonical: `${SITE_URL}/security` },
+  };
+}
 
 export default async function SecurityPolicy() {
   const documents = await fetchCmsResource("/api/public/legal", "documents");
