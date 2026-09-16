@@ -61,10 +61,12 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
             style={{ display: "none", visibility: "hidden" }}
           />
         </noscript>
-        {/* Critical content renders first */}
+        {/* Page content renders directly (not inside Suspense) so that
+            notFound()/redirect() in a page can still set the correct HTTP
+            status code before any response bytes are streamed to the client. */}
+        {children}
+        {/* <ScrollToTop /> */}
         <Suspense fallback={null}>
-          {children}
-          {/* <ScrollToTop /> */}
           <ChatbotWidget />
         </Suspense>
       </body>

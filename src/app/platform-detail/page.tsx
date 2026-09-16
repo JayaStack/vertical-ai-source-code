@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, Suspense } from "react";
 import { motion, useInView } from "framer-motion";
 import {
     Activity,
@@ -26,7 +26,7 @@ import PlatformIndustryFAQ from "@/components/landing-page/platform-industry-faq
 import TestimonialV3 from "@/components/landing-page/testimonial-v3";
 
 
-export default function PlatformDetailPage() {
+function PlatformDetailContent() {
     const router = useRouter();
     const searchParams = useSearchParams();
     const [data, setData] = useState<any>(null);
@@ -558,6 +558,13 @@ export default function PlatformDetailPage() {
     );
 }
 
+export default function PlatformDetailPage() {
+    return (
+        <Suspense fallback={<div className="min-h-screen bg-white" />}>
+            <PlatformDetailContent />
+        </Suspense>
+    );
+}
 
 function Counter({ target }: { target: number }) {
     const [count, setCount] = useState(0);
