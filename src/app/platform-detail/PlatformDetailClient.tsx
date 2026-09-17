@@ -391,8 +391,9 @@ function PlatformDetailContent() {
                             const statIcons = [TrendingDown, Activity, Zap, Clock];
                             const Icon = statIcons[i % statIcons.length];
                             const match = String(stat.value).match(/[\d.]+/);
+                            const hasNumber = !!match;
                             const num = match ? parseInt(match[0], 10) : 0;
-                            const sym = match ? String(stat.value).slice((match.index || 0) + match[0].length) : String(stat.value);
+                            const sym = match ? String(stat.value).slice((match.index || 0) + match[0].length) : "";
 
                             return (
                                 <motion.div
@@ -408,8 +409,8 @@ function PlatformDetailContent() {
                                     </div>
                                     <div className="space-y-3">
                                         <div className="text-5xl font-semibold text-primary flex items-baseline gap-1">
-                                            <Counter target={num} />
-                                            <span className="text-2xl font-bold text-accent transition-transform duration-500 group-hover:-translate-y-1">{sym}</span>
+                                            {hasNumber && <Counter target={num} />}
+                                            <span className="text-2xl font-bold text-accent transition-transform duration-500 group-hover:-translate-y-1">{hasNumber ? sym : stat.value}</span>
                                         </div>
                                         <div className="font-bold text-gray-600 text-lg group-hover:text-primary transition-colors">{stat.label}</div>
                                         <p className="text-gray-500 text-sm leading-relaxed">{stat.description}</p>
