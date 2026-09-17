@@ -30,12 +30,14 @@ const VerticalStep = ({ step, index }: { step: Step; index: number }) => {
             <div className="bg-[#f7fafc] rounded-2xl border-[1px] border-slate-100 overflow-hidden shadow-sm flex flex-col md:flex-row items-stretch min-h-fit md:min-h-[450px]">
                 {/* Visual side - The "Animated Gif / Video" area */}
                 <div className="w-full md:w-[50%] relative min-h-[250px] md:min-h-[300px] lg:min-h-full bg-slate-100 border-b md:border-b-0 md:border-r border-slate-200">
-                    <img
-                        key={step.imageUrl}
-                        src={step.imageUrl}
-                        alt={step.title}
-                        className="w-full h-full object-cover"
-                    />
+                    {step.imageUrl && (
+                        <img
+                            key={step.imageUrl}
+                            src={step.imageUrl}
+                            alt={step.title}
+                            className="w-full h-full object-cover"
+                        />
+                    )}
                     {/* Subtle Overlay to blend with the card */}
                     <div className="absolute inset-0 bg-gradient-to-r from-transparent via-transparent to-[#f7fafc]/20" />
                 </div>

@@ -82,12 +82,14 @@ export default function HowItWorks2({ data }: { data?: any }) {
                                         zIndex: index + 1
                                     }}
                                 >
-                                    <div className="relative w-full h-full">
-                                        <img
-                                            src={step.imageUrl}
-                                            alt={step.title}
-                                            className="w-full h-full object-cover"
-                                        />
+                                    <div className="relative w-full h-full bg-gray-100">
+                                        {step.imageUrl && (
+                                            <img
+                                                src={step.imageUrl}
+                                                alt={step.title}
+                                                className="w-full h-full object-cover"
+                                            />
+                                        )}
                                     </div>
                                 </motion.div>
                             ))}
@@ -118,13 +120,15 @@ export default function HowItWorks2({ data }: { data?: any }) {
                                     whileInView={{ opacity: 1, y: 0 }}
                                     viewport={{ once: true, margin: "-10%" }}
                                     transition={{ duration: 0.6, ease: "easeOut" }}
-                                    className="w-full aspect-[4/3] rounded-3xl overflow-hidden shadow-xl border border-gray-100 bg-white"
+                                    className="w-full aspect-[4/3] rounded-3xl overflow-hidden shadow-xl border border-gray-100 bg-gray-100"
                                 >
-                                    <img
-                                        src={step.imageUrl}
-                                        alt={step.title}
-                                        className="w-full h-full object-cover"
-                                    />
+                                    {step.imageUrl && (
+                                        <img
+                                            src={step.imageUrl}
+                                            alt={step.title}
+                                            className="w-full h-full object-cover"
+                                        />
+                                    )}
                                 </motion.div>
                                 <motion.div 
                                     initial={{ opacity: 0, x: -20 }}
