@@ -9,10 +9,34 @@ export async function generateMetadata(): Promise<Metadata> {
   const documents = await fetchCmsResource("/api/public/legal", "documents");
   const doc: any = documents.find((d: any) => d.slug === "security" && d.status === "published");
 
+  const title = doc?.metaTitle || doc?.title || "Security Policy";
+  const description =
+    doc?.metaDescription ||
+    "Learn about The Vertical AI's security practices, compliance, and data protection standards.";
+  const canonical = `${SITE_URL}/security`;
+  const ogTitle = doc?.ogTitle || title;
+  const ogDescription = doc?.ogDescription || description;
+  const ogImage = doc?.ogImageUrl || doc?.bannerUrl;
+  const ogImageAlt = doc?.ogImageAlt || title;
+
   return {
-    title: doc?.title || "Security Policy",
-    description: "Learn about The Vertical AI's security practices, compliance, and data protection standards.",
-    alternates: { canonical: `${SITE_URL}/security` },
+    title,
+    description,
+    keywords: doc?.metaKeywords || undefined,
+    alternates: { canonical },
+    openGraph: {
+      title: ogTitle,
+      description: ogDescription,
+      siteName: doc?.ogSiteName || "The Vertical AI",
+      url: doc?.ogUrl || canonical,
+      type: (doc?.ogType || "website") as any,
+      images: ogImage ? [{ url: ogImage, alt: ogImageAlt }] : undefined,
+    },
+    twitter: {
+      title: ogTitle,
+      description: ogDescription,
+      images: ogImage ? [ogImage] : undefined,
+    },
   };
 }
 

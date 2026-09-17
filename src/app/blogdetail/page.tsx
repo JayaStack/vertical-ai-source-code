@@ -20,14 +20,31 @@ export async function generateMetadata({
   const post = await getPublishedPost(slug);
   if (!post) return {};
 
+  const title = post.metaTitle || post.title;
+  const description = post.metaDescription || post.excerpt;
+  const canonical = `${SITE_URL}/blogdetail?slug=${slug}`;
+  const ogTitle = post.ogTitle || title;
+  const ogDescription = post.ogDescription || description;
+  const ogImage = post.ogImageUrl || post.bannerUrl;
+  const ogImageAlt = post.ogImageAlt || title;
+
   return {
-    title: post.metaTitle || post.title,
-    description: post.metaDescription || post.excerpt,
-    alternates: {
-      canonical: `${SITE_URL}/blogdetail?slug=${slug}`,
-    },
+    title,
+    description,
+    keywords: post.metaKeywords || undefined,
+    alternates: { canonical },
     openGraph: {
-      images: [post.ogImageUrl || post.bannerUrl].filter(Boolean),
+      title: ogTitle,
+      description: ogDescription,
+      siteName: post.ogSiteName || "The Vertical AI",
+      url: post.ogUrl || canonical,
+      type: (post.ogType || "website") as any,
+      images: ogImage ? [{ url: ogImage, alt: ogImageAlt }] : undefined,
+    },
+    twitter: {
+      title: ogTitle,
+      description: ogDescription,
+      images: ogImage ? [ogImage] : undefined,
     },
   };
 }

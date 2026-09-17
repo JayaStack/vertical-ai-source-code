@@ -20,14 +20,31 @@ export async function generateMetadata({
   const cs = await getPublishedCaseStudy(slug);
   if (!cs) return {};
 
+  const title = cs.metaTitle || cs.storyTitle;
+  const description = cs.metaDescription || undefined;
+  const canonical = `${SITE_URL}/case-study-detail?slug=${slug}`;
+  const ogTitle = cs.ogTitle || title;
+  const ogDescription = cs.ogDescription || description;
+  const ogImage = cs.ogImageUrl || cs.headerImageUrl;
+  const ogImageAlt = cs.ogImageAlt || title;
+
   return {
-    title: cs.metaTitle || cs.storyTitle,
-    description: cs.metaDescription || undefined,
-    alternates: {
-      canonical: `${SITE_URL}/case-study-detail?slug=${slug}`,
-    },
+    title,
+    description,
+    keywords: cs.metaKeywords || undefined,
+    alternates: { canonical },
     openGraph: {
-      images: [cs.ogImageUrl || cs.headerImageUrl].filter(Boolean),
+      title: ogTitle,
+      description: ogDescription,
+      siteName: cs.ogSiteName || "The Vertical AI",
+      url: cs.ogUrl || canonical,
+      type: (cs.ogType || "website") as any,
+      images: ogImage ? [{ url: ogImage, alt: ogImageAlt }] : undefined,
+    },
+    twitter: {
+      title: ogTitle,
+      description: ogDescription,
+      images: ogImage ? [ogImage] : undefined,
     },
   };
 }
