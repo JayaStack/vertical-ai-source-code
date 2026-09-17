@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { fetchCmsResource } from "@/lib/cms-api";
-import { SITE_URL } from "@/lib/site";
+import { SITE_URL, absoluteUrl } from "@/lib/site";
 import CaseStudyDetailClient from "./CaseStudyDetailClient";
 
 async function getPublishedCaseStudy(slug: string | undefined) {
@@ -65,7 +65,7 @@ export default async function CaseStudyDetailPage({
     "@context": "https://schema.org",
     "@type": "CreativeWork",
     headline: cs.storyTitle,
-    image: cs.ogImageUrl || cs.headerImageUrl || undefined,
+    image: absoluteUrl(cs.ogImageUrl || cs.headerImageUrl),
     dateModified: cs.updatedAt || undefined,
   };
 

@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { fetchCmsResource } from "@/lib/cms-api";
-import { SITE_URL } from "@/lib/site";
+import { SITE_URL, absoluteUrl } from "@/lib/site";
 import IndustryDetailClient from "./IndustryDetailClient";
 
 async function getPublishedIndustry(slug: string) {
@@ -66,7 +66,7 @@ export default async function IndustryPage({
     "@context": "https://schema.org",
     "@type": "WebPage",
     headline: row.name,
-    image: row.ogImageUrl || row.heroImageUrl || undefined,
+    image: absoluteUrl(row.ogImageUrl || row.heroImageUrl),
     dateModified: row.updatedAt || undefined,
   };
 

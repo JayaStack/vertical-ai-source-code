@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { fetchCmsResource } from "@/lib/cms-api";
-import { SITE_URL } from "@/lib/site";
+import { SITE_URL, absoluteUrl } from "@/lib/site";
 import BlogDetailClient from "./BlogDetailClient";
 
 async function getPublishedPost(slug: string | undefined) {
@@ -68,7 +68,7 @@ export default async function BlogDetailPage({
     datePublished: post.publishedAt || post.createdAt || undefined,
     dateModified: post.updatedAt || post.publishedAt || undefined,
     author: post.author ? { "@type": "Person", name: post.author } : undefined,
-    image: post.ogImageUrl || post.bannerUrl || undefined,
+    image: absoluteUrl(post.ogImageUrl || post.bannerUrl),
   };
 
   return (

@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { fetchCmsResource } from "@/lib/cms-api";
-import { SITE_URL } from "@/lib/site";
+import { SITE_URL, absoluteUrl } from "@/lib/site";
 import FeatureClientPage from "./feature-client-page";
 
 async function getPublishedPillar(slug: string) {
@@ -64,7 +64,7 @@ export default async function FeaturePage({
     "@context": "https://schema.org",
     "@type": "WebPage",
     headline: pillar.heroBannerText || pillar.mainHeading,
-    image: pillar.ogImageUrl || pillar.heroBannerImageUrl || undefined,
+    image: absoluteUrl(pillar.ogImageUrl || pillar.heroBannerImageUrl),
     dateModified: pillar.updatedAt || undefined,
   };
 

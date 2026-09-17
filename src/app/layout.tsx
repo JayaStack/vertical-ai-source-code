@@ -4,6 +4,7 @@ import "./globals.css";
 import { Suspense } from "react";
 import ScrollToTop from "@/components/landing-page/ScrollToTop";
 import ChatbotWidget from "@/components/landing-page/chatbot-widget";
+import { SITE_URL } from "@/lib/site";
 
 const ubuntu = Ubuntu({
   variable: "--font-ubuntu",
@@ -16,6 +17,7 @@ const ubuntu = Ubuntu({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL(SITE_URL),
   title: "The Vertical AI - AI-Native Enterprise OS for Conversations",
   description:
     "The Vertical AI - AI-Native Enterprise OS for Conversations",
