@@ -4,6 +4,7 @@ import LandingPageFooter from "@/components/landing-page/landing-page-footer";
 import PageHero from "@/components/landing-page/page-hero";
 import { fetchCmsResource } from "@/lib/cms-api";
 import { SITE_URL } from "@/lib/site";
+import { JsonLd, buildDefaultSchema } from "@/lib/json-ld";
 
 export async function generateMetadata(): Promise<Metadata> {
   const documents = await fetchCmsResource("/api/public/legal", "documents");
@@ -52,6 +53,7 @@ export default async function SecurityPolicy() {
 
   return (
     <div className="min-h-screen bg-white">
+      <JsonLd data={doc?.schemaMarkup || JSON.stringify(buildDefaultSchema("legal", doc || {}))} />
       <Header visible={true} />
 
       <PageHero

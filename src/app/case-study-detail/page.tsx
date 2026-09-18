@@ -1,7 +1,8 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { fetchCmsResource } from "@/lib/cms-api";
-import { SITE_URL, absoluteUrl } from "@/lib/site";
+import { SITE_URL } from "@/lib/site";
+import { JsonLd, buildDefaultSchema } from "@/lib/json-ld";
 import CaseStudyDetailClient from "./CaseStudyDetailClient";
 
 async function getPublishedCaseStudy(slug: string | undefined) {
@@ -61,20 +62,9 @@ export default async function CaseStudyDetailPage({
     notFound();
   }
 
-  const jsonLd = {
-    "@context": "https://schema.org",
-    "@type": "CreativeWork",
-    headline: cs.storyTitle,
-    image: absoluteUrl(cs.ogImageUrl || cs.headerImageUrl),
-    dateModified: cs.updatedAt || undefined,
-  };
-
   return (
     <>
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
-      />
+      <JsonLd data={cs.schemaMarkup || JSON.stringify(buildDefaultSchema("caseStudy", cs))} />
       <CaseStudyDetailClient />
     </>
   );

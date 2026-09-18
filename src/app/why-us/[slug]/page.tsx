@@ -1,7 +1,8 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { fetchCmsResource } from "@/lib/cms-api";
-import { SITE_URL, absoluteUrl } from "@/lib/site";
+import { SITE_URL } from "@/lib/site";
+import { JsonLd, buildDefaultSchema } from "@/lib/json-ld";
 import FeatureClientPage from "./feature-client-page";
 
 async function getPublishedPillar(slug: string) {
@@ -60,20 +61,9 @@ export default async function FeaturePage({
     notFound();
   }
 
-  const jsonLd = {
-    "@context": "https://schema.org",
-    "@type": "WebPage",
-    headline: pillar.heroBannerText || pillar.mainHeading,
-    image: absoluteUrl(pillar.ogImageUrl || pillar.heroBannerImageUrl),
-    dateModified: pillar.updatedAt || undefined,
-  };
-
   return (
     <>
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
-      />
+      <JsonLd data={pillar.schemaMarkup || JSON.stringify(buildDefaultSchema("whyFramework", pillar))} />
       <FeatureClientPage slug={slug} />
     </>
   );

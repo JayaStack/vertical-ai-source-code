@@ -1,7 +1,8 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { fetchCmsResource } from "@/lib/cms-api";
-import { SITE_URL, absoluteUrl } from "@/lib/site";
+import { SITE_URL } from "@/lib/site";
+import { JsonLd, buildDefaultSchema } from "@/lib/json-ld";
 import IndustryDetailClient from "./IndustryDetailClient";
 
 async function getPublishedIndustry(slug: string) {
@@ -62,20 +63,9 @@ export default async function IndustryPage({
     notFound();
   }
 
-  const jsonLd = {
-    "@context": "https://schema.org",
-    "@type": "WebPage",
-    headline: row.name,
-    image: absoluteUrl(row.ogImageUrl || row.heroImageUrl),
-    dateModified: row.updatedAt || undefined,
-  };
-
   return (
     <>
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
-      />
+      <JsonLd data={row.schemaMarkup || JSON.stringify(buildDefaultSchema("industry", row))} />
       <IndustryDetailClient />
     </>
   );
