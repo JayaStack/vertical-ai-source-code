@@ -42,6 +42,7 @@ interface CustomSelectProps {
   placeholder?: string;
   disabled?: boolean;
   required?: boolean;
+  hasError?: boolean;
 }
 
 function CustomSelect({
@@ -50,6 +51,7 @@ function CustomSelect({
   options,
   placeholder = "Select...",
   disabled = false,
+  hasError = false,
 }: CustomSelectProps) {
   const [open, setOpen] = React.useState(false);
   const containerRef = React.useRef<HTMLDivElement>(null);
@@ -75,10 +77,13 @@ function CustomSelect({
         type="button"
         disabled={disabled}
         onClick={() => !disabled && setOpen((p) => !p)}
-        className={`w-full flex items-center justify-between px-4 py-3 rounded-xl border ${open
-          ? "border-primary ring-2 ring-primary/20"
-          : "border-gray-200"
-          } bg-gray-50/50 text-gray-900 transition-all font-medium text-sm cursor-pointer disabled:opacity-60 disabled:cursor-not-allowed`}
+        className={`w-full flex items-center justify-between px-4 py-3 rounded-xl border transition-all font-medium text-sm cursor-pointer disabled:opacity-60 disabled:cursor-not-allowed ${
+          hasError
+            ? "border-red-400 bg-red-50/50 text-gray-900"
+            : open
+            ? "border-primary ring-2 ring-primary/20 bg-gray-50/50 text-gray-900"
+            : "border-gray-200 bg-gray-50/50 text-gray-900"
+        }`}
       >
         <span className={selectedLabel ? "text-gray-900" : "text-gray-400"}>
           {selectedLabel || placeholder}
@@ -163,8 +168,99 @@ export default function JobDetailClient() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const [errors, setErrors] = useState<Record<string, string>>({});
 
   const fileInputRef = useRef<HTMLInputElement>(null);
+
+  // ─── Field validation (inline highlight on submit) ─────────────────────────
+  const clearError = (field: string) =>
+    setErrors((prev) => {
+      if (!prev[field]) return prev;
+      const next = { ...prev };
+      delete next[field];
+      return next;
+    });
+
+  const validateField = (field: string, value: any): string => {
+    switch (field) {
+      case "fullName":
+        return value.trim() ? "" : "Please enter your full name";
+      case "email": {
+        if (!value.trim()) return "Please enter your email address";
+        return /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(value.trim())
+          ? ""
+          : "Please enter a valid email address (e.g. name@example.com)";
+      }
+      case "phone": {
+        if (!value.trim()) return "Please enter your phone number";
+        return value.replace(/\D/g, "").length >= 10
+          ? ""
+          : "Please enter a valid phone number (at least 10 digits)";
+      }
+      case "currentLocation":
+        return value.trim() ? "" : "Please enter your current location";
+      case "totalExperience":
+        return value ? "" : "Please select your total experience";
+      case "noticePeriod":
+        return value ? "" : "Please select your notice period";
+      case "resumeFile":
+        return value ? "" : "Please upload your resume (PDF/DOCX)";
+      case "source":
+        return value ? "" : "Please select how you heard about us";
+      case "referrerName":
+        return value.trim()
+          ? ""
+          : "Please enter the name of the employee who referred you";
+      case "otherSource":
+        return value.trim() ? "" : "Please specify how you heard about us";
+      case "linkedin": {
+        if (!value.trim()) return "";
+        return /^https?:\/\/[^\s]+\.[^\s]+/i.test(value.trim())
+          ? ""
+          : "Please enter a valid URL (starting with https://)";
+      }
+      default:
+        return "";
+    }
+  };
+
+  const validateForm = (): boolean => {
+    const newErrors: Record<string, string> = {};
+    const check = (field: string, value: any) => {
+      const msg = validateField(field, value);
+      if (msg) newErrors[field] = msg;
+    };
+
+    check("fullName", fullName);
+    check("email", email);
+    check("phone", phone);
+    check("currentLocation", currentLocation);
+    check("totalExperience", totalExperience);
+    check("noticePeriod", noticePeriod);
+    check("resumeFile", resumeFile);
+    check("source", source);
+    if (source === "Employee Referral") check("referrerName", referrerName);
+    if (source === "Other") check("otherSource", otherSource);
+    check("linkedin", linkedin);
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
+
+  const inputClass = (hasError: boolean) =>
+    `w-full px-4 py-3 rounded-xl border text-gray-900 focus:outline-none transition-all font-medium text-sm disabled:opacity-60 ${
+      hasError
+        ? "border-red-400 bg-red-50/50 focus:ring-2 focus:ring-red-200 focus:border-red-400"
+        : "border-gray-200 bg-gray-50/50 focus:ring-2 focus:ring-primary/20 focus:border-primary"
+    }`;
+
+  const renderError = (field: string) =>
+    errors[field] ? (
+      <p className="text-xs text-red-500 font-semibold flex items-center gap-1">
+        <AlertCircle size={12} className="shrink-0" />
+        {errors[field]}
+      </p>
+    ) : null;
 
   if (!isLoadingJob && !job) {
     notFound();
@@ -185,7 +281,7 @@ export default function JobDetailClient() {
     // Validate size (max 5MB)
     const MAX_SIZE = 5 * 1024 * 1024;
     if (file.size > MAX_SIZE) {
-      toast.error("File size must be under 5MB");
+      setErrors((prev) => ({ ...prev, resumeFile: "File size must be under 5MB" }));
       return;
     }
 
@@ -193,12 +289,13 @@ export default function JobDetailClient() {
     const validExtensions = [".pdf", ".docx", ".doc"];
     const fileExtension = file.name.slice(file.name.lastIndexOf(".")).toLowerCase();
     if (!validExtensions.includes(fileExtension)) {
-      toast.error("Please upload a PDF or DOCX file");
+      setErrors((prev) => ({ ...prev, resumeFile: "Please upload a PDF or DOCX file" }));
       return;
     }
 
     setResumeFile(file);
     setErrorMessage(null);
+    clearError("resumeFile");
   };
 
   const handleDragOver = (e: React.DragEvent) => {
@@ -249,6 +346,7 @@ export default function JobDetailClient() {
     setResumeFile(null);
     setIsDragging(false);
     setErrorMessage(null);
+    setErrors({});
     if (fileInputRef.current) {
       fileInputRef.current.value = "";
     }
@@ -257,45 +355,14 @@ export default function JobDetailClient() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    // Required fields check
-    if (!fullName.trim()) {
-      toast.error("Please enter your full name");
-      return;
-    }
-    if (!email.trim()) {
-      toast.error("Please enter your email address");
-      return;
-    }
-    if (!phone.trim()) {
-      toast.error("Please enter your phone number");
-      return;
-    }
-    if (!currentLocation.trim()) {
-      toast.error("Please enter your current location");
-      return;
-    }
-    if (!totalExperience) {
-      toast.error("Please select your total experience");
-      return;
-    }
-    if (!noticePeriod) {
-      toast.error("Please select your notice period");
-      return;
-    }
-    if (!resumeFile) {
-      toast.error("Please upload your resume (PDF/DOCX)");
-      return;
-    }
-    if (!source) {
-      toast.error("Please select how you heard about us");
-      return;
-    }
-    if (source === "Employee Referral" && !referrerName.trim()) {
-      toast.error("Please enter the name of the employee who referred you");
-      return;
-    }
-    if (source === "Other" && !otherSource.trim()) {
-      toast.error("Please specify how you heard about us");
+    // Validate all fields; highlight problems inline on each field
+    if (!validateForm()) {
+      toast.error("Please fix the highlighted fields");
+      requestAnimationFrame(() => {
+        document
+          .querySelector('[aria-invalid="true"]')
+          ?.scrollIntoView({ behavior: "smooth", block: "center" });
+      });
       return;
     }
 
@@ -360,6 +427,7 @@ export default function JobDetailClient() {
   const handleOpenDialog = () => {
     setIsSubmitted(false);
     setErrorMessage(null);
+    setErrors({});
     setIsDialogOpen(true);
   };
 
@@ -590,7 +658,7 @@ export default function JobDetailClient() {
                 </button>
               </div>
             ) : (
-              <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+              <form onSubmit={handleSubmit} noValidate className="flex flex-col gap-4">
                 {/* Full Name (Required) */}
                 <div className="flex flex-col gap-1.5">
                   <label className="text-xs font-bold text-gray-700 uppercase tracking-wider">
@@ -600,11 +668,16 @@ export default function JobDetailClient() {
                     required
                     type="text"
                     value={fullName}
-                    onChange={(e) => setFullName(e.target.value)}
+                    onChange={(e) => {
+                      setFullName(e.target.value);
+                      clearError("fullName");
+                    }}
                     disabled={isSubmitting}
-                    className="w-full px-4 py-3 rounded-xl border border-gray-200 bg-gray-50/50 text-gray-900 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all font-medium text-sm disabled:opacity-60"
+                    aria-invalid={!!errors.fullName}
+                    className={inputClass(!!errors.fullName)}
                     placeholder="e.g. Rajesh Kumar"
                   />
+                  {renderError("fullName")}
                 </div>
 
                 {/* Email & Phone Grid */}
@@ -618,11 +691,16 @@ export default function JobDetailClient() {
                       required
                       type="email"
                       value={email}
-                      onChange={(e) => setEmail(e.target.value)}
+                      onChange={(e) => {
+                        setEmail(e.target.value);
+                        clearError("email");
+                      }}
                       disabled={isSubmitting}
-                      className="w-full px-4 py-3 rounded-xl border border-gray-200 bg-gray-50/50 text-gray-900 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all font-medium text-sm disabled:opacity-60"
+                      aria-invalid={!!errors.email}
+                      className={inputClass(!!errors.email)}
                       placeholder="rajesh@example.com"
                     />
+                    {renderError("email")}
                   </div>
 
                   {/* Phone Number (Required) */}
@@ -634,11 +712,16 @@ export default function JobDetailClient() {
                       required
                       type="tel"
                       value={phone}
-                      onChange={(e) => setPhone(e.target.value)}
+                      onChange={(e) => {
+                        setPhone(e.target.value);
+                        clearError("phone");
+                      }}
                       disabled={isSubmitting}
-                      className="w-full px-4 py-3 rounded-xl border border-gray-200 bg-gray-50/50 text-gray-900 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all font-medium text-sm disabled:opacity-60"
+                      aria-invalid={!!errors.phone}
+                      className={inputClass(!!errors.phone)}
                       placeholder="+91 98765 43210"
                     />
+                    {renderError("phone")}
                   </div>
                 </div>
 
@@ -653,11 +736,16 @@ export default function JobDetailClient() {
                   <input
                     type="url"
                     value={linkedin}
-                    onChange={(e) => setLinkedin(e.target.value)}
+                    onChange={(e) => {
+                      setLinkedin(e.target.value);
+                      clearError("linkedin");
+                    }}
                     disabled={isSubmitting}
-                    className="w-full px-4 py-3 rounded-xl border border-gray-200 bg-gray-50/50 text-gray-900 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all font-medium text-sm disabled:opacity-60"
+                    aria-invalid={!!errors.linkedin}
+                    className={inputClass(!!errors.linkedin)}
                     placeholder="https://linkedin.com/in/username"
                   />
+                  {renderError("linkedin")}
                 </div>
 
                 {/* Current Location (Required) */}
@@ -669,11 +757,16 @@ export default function JobDetailClient() {
                     required
                     type="text"
                     value={currentLocation}
-                    onChange={(e) => setCurrentLocation(e.target.value)}
+                    onChange={(e) => {
+                      setCurrentLocation(e.target.value);
+                      clearError("currentLocation");
+                    }}
                     disabled={isSubmitting}
-                    className="w-full px-4 py-3 rounded-xl border border-gray-200 bg-gray-50/50 text-gray-900 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all font-medium text-sm disabled:opacity-60"
+                    aria-invalid={!!errors.currentLocation}
+                    className={inputClass(!!errors.currentLocation)}
                     placeholder="e.g. Bengaluru, Mumbai, Delhi-NCR, Hyderabad"
                   />
+                  {renderError("currentLocation")}
                 </div>
 
                 {/* Experience & Notice Period Grid */}
@@ -685,7 +778,11 @@ export default function JobDetailClient() {
                     </label>
                     <CustomSelect
                       value={totalExperience}
-                      onChange={setTotalExperience}
+                      onChange={(val) => {
+                        setTotalExperience(val);
+                        clearError("totalExperience");
+                      }}
+                      hasError={!!errors.totalExperience}
                       disabled={isSubmitting}
                       required
                       placeholder="Select exp..."
@@ -697,6 +794,7 @@ export default function JobDetailClient() {
                         { value: "6+ Years", label: "6+ Years" },
                       ]}
                     />
+                    {renderError("totalExperience")}
                   </div>
 
                   {/* Notice Period (Required) */}
@@ -706,7 +804,11 @@ export default function JobDetailClient() {
                     </label>
                     <CustomSelect
                       value={noticePeriod}
-                      onChange={setNoticePeriod}
+                      onChange={(val) => {
+                        setNoticePeriod(val);
+                        clearError("noticePeriod");
+                      }}
+                      hasError={!!errors.noticePeriod}
                       disabled={isSubmitting}
                       required
                       placeholder="Select notice..."
@@ -719,6 +821,7 @@ export default function JobDetailClient() {
                         { value: "90 Days", label: "90 Days" },
                       ]}
                     />
+                    {renderError("noticePeriod")}
                   </div>
                 </div>
 
@@ -790,6 +893,8 @@ export default function JobDetailClient() {
                       onDrop={handleDrop}
                       className={`border-2 border-dashed rounded-2xl p-5 text-center transition-all cursor-pointer group ${isDragging
                         ? "border-primary bg-primary/5"
+                        : errors.resumeFile
+                        ? "border-red-400 bg-red-50/50"
                         : "border-gray-200 bg-gray-50/50 hover:bg-gray-50 hover:border-primary/50"
                         }`}
                     >
@@ -808,6 +913,7 @@ export default function JobDetailClient() {
                       </p>
                     </div>
                   )}
+                  {renderError("resumeFile")}
                 </div>
 
                 {/* How did you hear about us? (Required) */}
@@ -819,9 +925,11 @@ export default function JobDetailClient() {
                     value={source}
                     onChange={(val) => {
                       setSource(val);
+                      clearError("source");
                       if (val !== "Other") setOtherSource("");
                       if (val !== "Employee Referral") setReferrerName("");
                     }}
+                    hasError={!!errors.source}
                     disabled={isSubmitting}
                     required
                     placeholder="Select an option..."
@@ -834,6 +942,7 @@ export default function JobDetailClient() {
                       { value: "Other", label: "Other" },
                     ]}
                   />
+                  {renderError("source")}
 
                   {/* Input box when "Employee Referral" is selected */}
                   {source === "Employee Referral" && (
@@ -844,12 +953,17 @@ export default function JobDetailClient() {
                       <input
                         type="text"
                         value={referrerName}
-                        onChange={(e) => setReferrerName(e.target.value)}
+                        onChange={(e) => {
+                          setReferrerName(e.target.value);
+                          clearError("referrerName");
+                        }}
                         disabled={isSubmitting}
                         required
-                        className="w-full px-4 py-3 rounded-xl border border-gray-200 bg-gray-50/50 text-gray-900 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all font-medium text-sm disabled:opacity-60 placeholder:text-gray-400"
+                        aria-invalid={!!errors.referrerName}
+                        className={inputClass(!!errors.referrerName)}
                         placeholder="Enter the employee's name (e.g. John Doe)..."
                       />
+                      {renderError("referrerName")}
                     </div>
                   )}
 
@@ -862,12 +976,17 @@ export default function JobDetailClient() {
                       <input
                         type="text"
                         value={otherSource}
-                        onChange={(e) => setOtherSource(e.target.value)}
+                        onChange={(e) => {
+                          setOtherSource(e.target.value);
+                          clearError("otherSource");
+                        }}
                         disabled={isSubmitting}
                         required
-                        className="w-full px-4 py-3 rounded-xl border border-gray-200 bg-gray-50/50 text-gray-900 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all font-medium text-sm disabled:opacity-60 placeholder:text-gray-400"
+                        aria-invalid={!!errors.otherSource}
+                        className={inputClass(!!errors.otherSource)}
                         placeholder="Please specify where you heard about us..."
                       />
+                      {renderError("otherSource")}
                     </div>
                   )}
                 </div>
