@@ -22,7 +22,7 @@ export function useIndustryNavItems(): IndustryNavItem[] {
             json.data.map((i: any) => ({
               name: i.name,
               desc: i.heroDescription || "",
-              href: `/industry-detail?slug=${i.slug}`,
+              href: `/industry/${i.slug}`,
             }))
           );
         }

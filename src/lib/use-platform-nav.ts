@@ -22,7 +22,7 @@ export function usePlatformNavItems(): PlatformNavItem[] {
             json.data.map((p: any) => ({
               name: p.name,
               desc: p.heroTitle || "",
-              href: `/platform-detail?slug=${p.slug}`,
+              href: `/platform/${p.slug}`,
             }))
           );
         }

@@ -174,10 +174,10 @@ export default function Header({ visible = true }: HeaderProps) {
   };
 
   const getDefaultAccordion = (path: string) => {
-    if (path.includes("/platform-detail")) {
+    if (path.includes("/platform/")) {
       return "platform";
     }
-    if (path.includes("/industry-detail")) {
+    if (path.includes("/industry/")) {
       return "industries";
     }
     if (

@@ -1,6 +1,6 @@
 "use client";
 
-import { useSearchParams } from "next/navigation";
+import { useParams } from "next/navigation";
 import { useEffect, useState, Suspense } from "react";
 import Header from "@/components/landing-page/header";
 import LandingPageFooter from "@/components/landing-page/landing-page-footer";
@@ -67,8 +67,8 @@ function renderSection(section: Section, index: number) {
 }
 
 function BlogDetailContent() {
-  const searchParams = useSearchParams();
-  const slug = searchParams.get("slug");
+  const params = useParams();
+  const slug = params.slug as string;
   const [data, setData] = useState<any>(null);
   const [loading, setLoading] = useState(true);
 

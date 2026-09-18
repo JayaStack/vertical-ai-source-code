@@ -38,21 +38,21 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const blogEntries: MetadataRoute.Sitemap = blogs
     .filter((b: any) => b.status === "published")
     .map((b: any) => ({
-      url: `${SITE_URL}/blogdetail?slug=${b.slug}`,
+      url: `${SITE_URL}/blog/${b.slug}`,
       lastModified: b.publishedAt ? new Date(b.publishedAt) : b.updatedAt ? new Date(b.updatedAt) : new Date(),
     }));
 
   const caseStudyEntries: MetadataRoute.Sitemap = caseStudies
     .filter((c: any) => c.status === "published")
     .map((c: any) => ({
-      url: `${SITE_URL}/case-study-detail?slug=${c.slug}`,
+      url: `${SITE_URL}/case-study/${c.slug}`,
       lastModified: c.updatedAt ? new Date(c.updatedAt) : new Date(),
     }));
 
   const industryEntries: MetadataRoute.Sitemap = industries
     .filter((i: any) => i.status === "published")
     .map((i: any) => ({
-      url: `${SITE_URL}/industry-detail?slug=${i.slug}`,
+      url: `${SITE_URL}/industry/${i.slug}`,
       lastModified: i.updatedAt ? new Date(i.updatedAt) : new Date(),
     }));
 
@@ -66,7 +66,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const platformEntries: MetadataRoute.Sitemap = platforms
     .filter((p: any) => p.status === "published")
     .map((p: any) => ({
-      url: `${SITE_URL}/platform-detail?slug=${p.slug}`,
+      url: `${SITE_URL}/platform/${p.slug}`,
       lastModified: p.updatedAt ? new Date(p.updatedAt) : new Date(),
     }));
 

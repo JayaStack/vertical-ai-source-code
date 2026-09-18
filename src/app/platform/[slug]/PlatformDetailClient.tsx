@@ -16,7 +16,7 @@ import {
     Award,
     Globe,
 } from "lucide-react";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useRouter, useParams } from "next/navigation";
 import Link from "next/link";
 import Header from "@/components/landing-page/header";
 import LandingPageFooter from "@/components/landing-page/landing-page-footer";
@@ -28,12 +28,12 @@ import TestimonialV3 from "@/components/landing-page/testimonial-v3";
 
 function PlatformDetailContent() {
     const router = useRouter();
-    const searchParams = useSearchParams();
+    const params = useParams();
+    const slug = params.slug as string;
     const [data, setData] = useState<any>(null);
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        const slug = searchParams.get('slug') || 'maestro';
         setLoading(true);
 
         fetch(`/api/platforms?slug=${encodeURIComponent(slug)}`)
@@ -92,7 +92,7 @@ function PlatformDetailContent() {
             })
             .catch(err => console.error("Error fetching platform data:", err))
             .finally(() => setLoading(false));
-    }, [searchParams]);
+    }, [slug]);
 
     if (loading) {
         return (
@@ -530,7 +530,7 @@ function PlatformDetailContent() {
             <TestimonialV3 />
 
             {/* FAQ */}
-            <PlatformIndustryFAQ scopeKey={searchParams.get('slug') || 'maestro'} />
+            <PlatformIndustryFAQ scopeKey={slug} />
 
             {/* 7. CTA - MODERN CINEMATIC */}
             <section className="bg-white">

@@ -4,7 +4,7 @@
 import { useState, useRef, useEffect } from "react";
 import Image from "next/image";
 import { motion, useInView, useSpring, useTransform, useScroll, AnimatePresence, useMotionValue } from "framer-motion";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useRouter, useParams } from "next/navigation";
 import Header from "@/components/landing-page/header";
 import LandingPageFooter from "@/components/landing-page/landing-page-footer";
 import OtherFeatures from "@/components/landing-page/other-features";
@@ -233,7 +233,8 @@ function TransformationFunnel({ data }: { data?: any }) {
 
 export default function IndustryDetailClient() {
     const router = useRouter();
-    const searchParams = useSearchParams();
+    const params = useParams();
+    const slug = params.slug as string;
     const [pageData, setPageData] = useState<any>(null);
     const [isLoading, setIsLoading] = useState(true);
 
@@ -241,8 +242,6 @@ export default function IndustryDetailClient() {
         const fetchIndustryData = async () => {
             setIsLoading(true);
             try {
-                const slug = searchParams.get('slug') || 'bfsi';
-
                 const response = await fetch(`/api/industries?slug=${encodeURIComponent(slug)}`);
                 const json = await response.json();
                 const row = json?.success ? json.data?.[0] : null;
@@ -338,7 +337,7 @@ export default function IndustryDetailClient() {
         };
 
         fetchIndustryData();
-    }, [searchParams]);
+    }, [slug]);
 
     if (isLoading) {
         return (
@@ -813,7 +812,7 @@ export default function IndustryDetailClient() {
             <TestimonialV3 />
 
             {/* FAQ */}
-            <PlatformIndustryFAQ scopeKey={searchParams.get('slug') || 'bfsi'} />
+            <PlatformIndustryFAQ scopeKey={slug} />
 
             {/* ================= 8️⃣ FINAL CTA - MODERN CINEMATIC ================= */}
             <section className="bg-white">
