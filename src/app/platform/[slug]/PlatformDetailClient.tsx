@@ -541,8 +541,7 @@ function PlatformDetailContent() {
                 <div className="bg-primary rounded-t-[40px] p-12 md:p-18 text-center relative overflow-hidden shadow-2xl shadow-primary/20">
                     <div className="relative z-10 max-w-3xl mx-auto space-y-10">
                         <h2 className="text-4xl md:text-5xl font-bold text-white leading-tight tracking-tight">
-                            {data.cta?.title || "Ready to scale your"} <br />
-                            {data.cta?.titleHighlight || "voice strategy?"}
+                            {data.cta?.title || "Ready to scale your"}{" "}{data.cta?.titleHighlight || "voice strategy?"}
                         </h2>
 
                         <div className="flex flex-col sm:flex-row items-center justify-center gap-6 pt-6">
