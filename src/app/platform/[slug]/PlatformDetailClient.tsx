@@ -274,9 +274,11 @@ function PlatformDetailContent() {
                                             <aside className={`py-6 col-span-12 flex flex-col justify-center space-y-5 md:col-span-5 lg:col-span-4 ${idx % 2 !== 0 ? 'lg:order-2' : ''}`}>
                                                 <div className="space-y-4">
                                                     <div>
-                                                        <div className="inline-flex items-center bg-primary/10 text-primary font-medium text-sm px-3 py-1 rounded-full mb-3">
-                                                            {card.title}
-                                                        </div>
+                                                        {card.title && (
+                                                            <div className="inline-flex items-center bg-primary/10 text-primary font-medium text-sm px-3 py-1 rounded-full mb-3">
+                                                                {card.title}
+                                                            </div>
+                                                        )}
                                                         <h3 className="text-2xl font-bold text-gray-600 leading-tight">{card.subtitle}</h3>
                                                     </div>
                                                     <p className="text-gray-500 leading-relaxed text-base">
@@ -315,9 +317,11 @@ function PlatformDetailContent() {
                                             <aside className={`py-4 col-span-12 flex flex-col justify-center space-y-4 md:col-span-6 ${idx % 2 !== 0 ? 'order-none md:order-1' : ''}`}>
                                                 <div className="space-y-4">
                                                     <div>
-                                                        <div className="inline-flex items-center bg-primary/10 text-primary font-bold text-xs px-3 py-1 rounded-full mb-3 uppercase tracking-wider">
-                                                            {card.title}
-                                                        </div>
+                                                        {card.title && (
+                                                            <div className="inline-flex items-center bg-primary/10 text-primary font-bold text-xs px-3 py-1 rounded-full mb-3 uppercase tracking-wider">
+                                                                {card.title}
+                                                            </div>
+                                                        )}
                                                         <h3 className="text-2xl font-bold text-gray-600">{card.subtitle}</h3>
                                                     </div>
                                                     <p className="text-gray-500 leading-relaxed text-base">
