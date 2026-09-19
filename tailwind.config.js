@@ -73,5 +73,11 @@ module.exports = {
       },
     },
   },
+  safelist: [
+    "text-primary",
+    "text-accent",
+    "font-bold",
+    "font-semibold",
+  ],
   plugins: [require("tailwindcss-animate")],
 };
