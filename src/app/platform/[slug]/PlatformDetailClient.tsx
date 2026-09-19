@@ -259,8 +259,8 @@ function PlatformDetailContent() {
                             transition={{ duration: 0.6, delay: 0.1 }}
                             className="text-3xl md:text-5xl text-gray-700 "
                         >
-                            Mission-Critical Workflows <br />
-                            <span className="text-primary font-semibold">Executed in Real Time.</span>
+                            {data.useCases?.sectionTitle} <br />
+                            <span className="text-primary font-semibold">{data.useCases?.sectionTitleHighlight}</span>
                         </motion.h2>
                     </div>
 
